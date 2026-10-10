@@ -66,5 +66,6 @@ its code, is distributed under the same license. The collector is MIT. See
 [NOTICE.md](NOTICE.md) and [REUSE.toml](REUSE.toml).
 
 The idea of a reusable glibc ABI dataset comes from the Zig project's
-[libc-abi-tools](https://codeberg.org/ziglang/libc-abi-tools). This is an
+[libc-abi-tools](https://codeberg.org/ziglang/libc-abi-tools) (as of commit
+[`9217cf899bf12bbb24a8a3de4cc2de682de0379d`](https://codeberg.org/ziglang/libc-abi-tools/src/commit/9217cf899bf12bbb24a8a3de4cc2de682de0379d)). This is an
 independent implementation that uses no Zig code or files.
