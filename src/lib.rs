@@ -30,6 +30,10 @@ pub const UPSTREAM: &str = "https://sourceware.org/git/glibc.git";
 pub const TARGET: &str = "x86_64-linux-gnu";
 /// SPDX license expression of the data and of this crate.
 pub const LICENSE: &str = "LGPL-2.1-or-later";
+/// The license text (the GNU LGPL version 2.1, as distributed with glibc).
+/// Include it whenever the ABI lists are redistributed, for example when
+/// writing them to disk.
+pub const LICENSE_TEXT: &str = include_str!("../LICENSES/LGPL-2.1-or-later.txt");
 
 /// One glibc release tag and the evidence for its files.
 #[derive(Debug)]
@@ -145,6 +149,12 @@ mod tests {
                 assert!(abilist(r.version, lib).is_some(), "{} {lib}", r.version);
             }
         }
+    }
+
+    #[test]
+    fn license_text_is_the_lgpl_2_1() {
+        assert!(LICENSE_TEXT.contains("GNU LESSER GENERAL PUBLIC LICENSE"));
+        assert!(LICENSE_TEXT.contains("Version 2.1, February 1999"));
     }
 
     #[test]
