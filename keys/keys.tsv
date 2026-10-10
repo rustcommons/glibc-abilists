@@ -1,0 +1,10 @@
+fingerprint	uid	sources	retrieved
+3C61DA0A54F87A7BE03BB2EA05835810DD929EC1	David S. Miller <davem@davemloft.net>	https://keyserver.ubuntu.com	2026-10-10
+6645B0A8C7005E78DB1D7864F99FFE0FEAE999BD	Allan McRae <me@allanmcrae.com>	https://keyserver.ubuntu.com	2026-10-10
+F37CDAB708E65EA183FD1AF625EF0A436C2A4AFF	Carlos O'Donell <carlos@systemhalted.org>	https://ftp.gnu.org/gnu/gnu-keyring.gpg,https://keyserver.ubuntu.com	2026-10-10
+A33EB0E9CDD826781F83AA48FA5044CA2BBBE6B5	Adhemerval Zanella Netto <zatrazz@gmail.com>	https://keyserver.ubuntu.com	2026-10-10
+7273542B39962DF7B299931416792B4EA25340F8	Carlos O'Donell <carlos@systemhalted.org>	https://ftp.gnu.org/gnu/gnu-keyring.gpg,https://keyserver.ubuntu.com,https://keys.openpgp.org	2026-10-10
+BC7C7372637EC10C57D7AA6579C43DFBF1CF2187	Siddhesh Poyarekar <siddhesh@gotplt.org>	https://ftp.gnu.org/gnu/gnu-keyring.gpg,https://keyserver.ubuntu.com	2026-10-10
+296D6F29A020808E8717A8842DB5BD89A340AEB7	Dmitry V. Levin <ldv@altlinux.org>	https://keyserver.ubuntu.com	2026-10-10
+50C106B7CFEB3B6412A6995AAAB1EC14A79488EF	Adhemerval Zanella Netto <zatrazz@gmail.com>	https://keyserver.ubuntu.com	2026-10-10
+35B17DF5752577CA0C541CEB94BFDF4484AD142F	Andreas K. Huettel (at work) <mail@akhuettel.de>	https://ftp.gnu.org/gnu/gnu-keyring.gpg,https://keyserver.ubuntu.com,https://keys.openpgp.org	2026-10-10

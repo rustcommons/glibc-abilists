@@ -1,0 +1,2 @@
+tag	signing_key	reason
+glibc-2.30	19DBA67103BE02611CBF20728E72AB4414F97278	Signed by Carlos O'Donell (tagger carlos@redhat.com); the key is not in the GNU keyring or on keyserver.ubuntu.com, keys.openpgp.org, pgp.mit.edu, or keys.gnupg.net (checked 2026-10-10). Tag object agreement across mirrors is required instead.

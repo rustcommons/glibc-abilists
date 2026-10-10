@@ -1,0 +1,4 @@
+The files in keys/ are OpenPGP public keys published by their holders (see
+keys/keys.tsv for each key's holder and where it was obtained). They are
+redistributed unchanged so that anyone can verify glibc's release-tag
+signatures offline. No license is claimed for them by this project.

@@ -1,0 +1,15 @@
+[package]
+name = "glibc-abilists-collector"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.90"
+description = "Collects glibc's ABI lists and their provenance from glibc's release tags"
+repository = "https://github.com/rustcommons/glibc-abilists"
+license = "MIT"
+publish = false
+
+[[bin]]
+name = "glibc-abilists-collect"
+path = "src/main.rs"
+
+[dependencies]

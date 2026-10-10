@@ -1,0 +1,25 @@
+# Input to the collector. Changing this file changes the published data.
+
+# The authoritative glibc repository; every tag must exist here.
+repository = "https://sourceware.org/git/glibc.git"
+# Independent mirrors; where one has a tag, its tag object must be identical.
+mirrors = ["https://github.com/bminor/glibc.git"]
+
+# Release tags glibc-<first> .. glibc-<last>, every minor release in between.
+first = "2.17"
+last = "2.44"
+
+target = "x86_64-linux-gnu"
+# Directories searched, non-recursively, most specific first. A library's ABI
+# list is taken from the first directory that has `<library>.abilist`; this
+# mirrors which file glibc's own build uses for the x86_64 64-bit ABI.
+# (nptl/ held the lists before 2.20; libmvec is shared by x86_64 ABIs.)
+directories = [
+  "sysdeps/unix/sysv/linux/x86_64/64/nptl",
+  "sysdeps/unix/sysv/linux/x86_64/64",
+  "sysdeps/unix/sysv/linux/x86_64",
+]
+
+# glibc's README names this file as the library's copying conditions. The
+# collector requires it to be the GNU LGPL version 2.1 at every tag.
+license_file = "COPYING.LIB"
