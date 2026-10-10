@@ -601,9 +601,9 @@ fn collect_release(
         tag: tag.to_string(),
         tag_object: tag_object.to_string(),
         commit: commit.to_string(),
-        commit_date: commit_date.to_string(),
+        commit_date: iso_date(commit_date),
         tagger: tagger.to_string(),
-        tag_date: tag_date.to_string(),
+        tag_date: iso_date(tag_date),
         signature_status,
         signing_key,
         primary_key,
@@ -613,6 +613,16 @@ fn collect_release(
         license_sha256: hex(&sha256(&license)),
         files,
     })
+}
+
+/// git's `iso-strict` dates, with UTC written as `+00:00`: newer git
+/// versions print `Z`, older ones `+00:00`, and the output must not depend on
+/// the git version.
+fn iso_date(date: &str) -> String {
+    match date.strip_suffix('Z') {
+        Some(rest) => format!("{rest}+00:00"),
+        None => date.to_string(),
+    }
 }
 
 /// Fingerprint -> expiry time (seconds since the epoch) of a primary key and
@@ -876,6 +886,22 @@ mod tests {
         assert_eq!(v.first().map(String::as_str), Some("2.17"));
         assert_eq!(v.last().map(String::as_str), Some("2.44"));
         assert_eq!(v.len(), 28);
+    }
+
+    #[test]
+    fn utc_dates_do_not_depend_on_the_git_version() {
+        assert_eq!(
+            iso_date("2018-02-01T16:17:18Z"),
+            "2018-02-01T16:17:18+00:00"
+        );
+        assert_eq!(
+            iso_date("2018-02-01T16:17:18+00:00"),
+            "2018-02-01T16:17:18+00:00"
+        );
+        assert_eq!(
+            iso_date("2019-08-01T00:33:39-04:00"),
+            "2019-08-01T00:33:39-04:00"
+        );
     }
 
     #[test]

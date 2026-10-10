@@ -385,9 +385,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/nptl/libBrokenLocale.abilist",
         blob: "be74b4bf0ce49cedda71f1cf471be289ebf50701",
         sha256: "3edcc14daae17aa66d7a7b260f793f7a8ac3a647b4c7cc897ba6980e749b4150",
-        text: include_str!(
-            "../data/2.17/sysdeps/unix/sysv/linux/x86_64/64/nptl/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.17/sysdeps/unix/sysv/linux/x86_64/64/nptl/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.17",
@@ -443,9 +441,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/nptl/libpthread.abilist",
         blob: "7c33f350d46996d08dad6983e5ec7ac523aa437f",
         sha256: "c9799f566bd6f53c932443b5c1d32a15478b6275745652a21a8cc54fdb5c36e6",
-        text: include_str!(
-            "../data/2.17/sysdeps/unix/sysv/linux/x86_64/64/nptl/libpthread.abilist"
-        ),
+        text: include_str!("../data/2.17/sysdeps/unix/sysv/linux/x86_64/64/nptl/libpthread.abilist"),
     },
     AbiList {
         release: "2.17",
@@ -469,9 +465,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/nptl/libthread_db.abilist",
         blob: "eed6765bcdd2be354f859ba8507263fb72c97988",
         sha256: "b220cf680ed8c6355702422301196550fd880ba2518f80483f8b1d74c6a1d79f",
-        text: include_str!(
-            "../data/2.17/sysdeps/unix/sysv/linux/x86_64/64/nptl/libthread_db.abilist"
-        ),
+        text: include_str!("../data/2.17/sysdeps/unix/sysv/linux/x86_64/64/nptl/libthread_db.abilist"),
     },
     AbiList {
         release: "2.17",
@@ -495,9 +489,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/nptl/libBrokenLocale.abilist",
         blob: "be74b4bf0ce49cedda71f1cf471be289ebf50701",
         sha256: "3edcc14daae17aa66d7a7b260f793f7a8ac3a647b4c7cc897ba6980e749b4150",
-        text: include_str!(
-            "../data/2.18/sysdeps/unix/sysv/linux/x86_64/64/nptl/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.18/sysdeps/unix/sysv/linux/x86_64/64/nptl/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.18",
@@ -553,9 +545,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/nptl/libpthread.abilist",
         blob: "1b5192b5929b3ecb92617bf8307c4a69ecde8c56",
         sha256: "c2da1cb196172904e74f97cc3410498fd3c686048f1fd82b747f02c95a3cf7bb",
-        text: include_str!(
-            "../data/2.18/sysdeps/unix/sysv/linux/x86_64/64/nptl/libpthread.abilist"
-        ),
+        text: include_str!("../data/2.18/sysdeps/unix/sysv/linux/x86_64/64/nptl/libpthread.abilist"),
     },
     AbiList {
         release: "2.18",
@@ -579,9 +569,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/nptl/libthread_db.abilist",
         blob: "eed6765bcdd2be354f859ba8507263fb72c97988",
         sha256: "b220cf680ed8c6355702422301196550fd880ba2518f80483f8b1d74c6a1d79f",
-        text: include_str!(
-            "../data/2.18/sysdeps/unix/sysv/linux/x86_64/64/nptl/libthread_db.abilist"
-        ),
+        text: include_str!("../data/2.18/sysdeps/unix/sysv/linux/x86_64/64/nptl/libthread_db.abilist"),
     },
     AbiList {
         release: "2.18",
@@ -605,9 +593,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/nptl/libBrokenLocale.abilist",
         blob: "be74b4bf0ce49cedda71f1cf471be289ebf50701",
         sha256: "3edcc14daae17aa66d7a7b260f793f7a8ac3a647b4c7cc897ba6980e749b4150",
-        text: include_str!(
-            "../data/2.19/sysdeps/unix/sysv/linux/x86_64/64/nptl/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.19/sysdeps/unix/sysv/linux/x86_64/64/nptl/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.19",
@@ -663,9 +649,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/nptl/libpthread.abilist",
         blob: "1b5192b5929b3ecb92617bf8307c4a69ecde8c56",
         sha256: "c2da1cb196172904e74f97cc3410498fd3c686048f1fd82b747f02c95a3cf7bb",
-        text: include_str!(
-            "../data/2.19/sysdeps/unix/sysv/linux/x86_64/64/nptl/libpthread.abilist"
-        ),
+        text: include_str!("../data/2.19/sysdeps/unix/sysv/linux/x86_64/64/nptl/libpthread.abilist"),
     },
     AbiList {
         release: "2.19",
@@ -689,9 +673,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/nptl/libthread_db.abilist",
         blob: "eed6765bcdd2be354f859ba8507263fb72c97988",
         sha256: "b220cf680ed8c6355702422301196550fd880ba2518f80483f8b1d74c6a1d79f",
-        text: include_str!(
-            "../data/2.19/sysdeps/unix/sysv/linux/x86_64/64/nptl/libthread_db.abilist"
-        ),
+        text: include_str!("../data/2.19/sysdeps/unix/sysv/linux/x86_64/64/nptl/libthread_db.abilist"),
     },
     AbiList {
         release: "2.19",
@@ -715,9 +697,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "be74b4bf0ce49cedda71f1cf471be289ebf50701",
         sha256: "3edcc14daae17aa66d7a7b260f793f7a8ac3a647b4c7cc897ba6980e749b4150",
-        text: include_str!(
-            "../data/2.20/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.20/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.20",
@@ -821,9 +801,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "be74b4bf0ce49cedda71f1cf471be289ebf50701",
         sha256: "3edcc14daae17aa66d7a7b260f793f7a8ac3a647b4c7cc897ba6980e749b4150",
-        text: include_str!(
-            "../data/2.21/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.21/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.21",
@@ -927,9 +905,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "be74b4bf0ce49cedda71f1cf471be289ebf50701",
         sha256: "3edcc14daae17aa66d7a7b260f793f7a8ac3a647b4c7cc897ba6980e749b4150",
-        text: include_str!(
-            "../data/2.22/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.22/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.22",
@@ -1041,9 +1017,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "907c72986ff7ded942f3e8d76dc6cf8875f6a869",
         sha256: "26cef173fdeab810a812713119458fed9b60097a1bb8b2c53ee1de82fa0e6e22",
-        text: include_str!(
-            "../data/2.23/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.23/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.23",
@@ -1155,9 +1129,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "907c72986ff7ded942f3e8d76dc6cf8875f6a869",
         sha256: "26cef173fdeab810a812713119458fed9b60097a1bb8b2c53ee1de82fa0e6e22",
-        text: include_str!(
-            "../data/2.24/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.24/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.24",
@@ -1269,9 +1241,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "907c72986ff7ded942f3e8d76dc6cf8875f6a869",
         sha256: "26cef173fdeab810a812713119458fed9b60097a1bb8b2c53ee1de82fa0e6e22",
-        text: include_str!(
-            "../data/2.25/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.25/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.25",
@@ -1383,9 +1353,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "907c72986ff7ded942f3e8d76dc6cf8875f6a869",
         sha256: "26cef173fdeab810a812713119458fed9b60097a1bb8b2c53ee1de82fa0e6e22",
-        text: include_str!(
-            "../data/2.26/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.26/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.26",
@@ -1497,9 +1465,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "907c72986ff7ded942f3e8d76dc6cf8875f6a869",
         sha256: "26cef173fdeab810a812713119458fed9b60097a1bb8b2c53ee1de82fa0e6e22",
-        text: include_str!(
-            "../data/2.27/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.27/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.27",
@@ -1611,9 +1577,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.28/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.28/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.28",
@@ -1725,9 +1689,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.29/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.29/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.29",
@@ -1839,9 +1801,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.30/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.30/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.30",
@@ -1953,9 +1913,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.31/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.31/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.31",
@@ -2067,9 +2025,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.32/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.32/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.32",
@@ -2181,9 +2137,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.33/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.33/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.33",
@@ -2295,9 +2249,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.34/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.34/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.34",
@@ -2321,9 +2273,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "45dfcd31c55f223e77f221150dc4bc0f6d520d7c",
         sha256: "7adadc0cac03f3a8ac484f6acaa092cab4f9328ffb16e353034719efce93359c",
-        text: include_str!(
-            "../data/2.34/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.34/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.34",
@@ -2419,9 +2369,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.35/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.35/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.35",
@@ -2445,9 +2393,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "45dfcd31c55f223e77f221150dc4bc0f6d520d7c",
         sha256: "7adadc0cac03f3a8ac484f6acaa092cab4f9328ffb16e353034719efce93359c",
-        text: include_str!(
-            "../data/2.35/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.35/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.35",
@@ -2543,9 +2489,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.36/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.36/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.36",
@@ -2569,9 +2513,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "45dfcd31c55f223e77f221150dc4bc0f6d520d7c",
         sha256: "7adadc0cac03f3a8ac484f6acaa092cab4f9328ffb16e353034719efce93359c",
-        text: include_str!(
-            "../data/2.36/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.36/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.36",
@@ -2667,9 +2609,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.37/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.37/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.37",
@@ -2693,9 +2633,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "45dfcd31c55f223e77f221150dc4bc0f6d520d7c",
         sha256: "7adadc0cac03f3a8ac484f6acaa092cab4f9328ffb16e353034719efce93359c",
-        text: include_str!(
-            "../data/2.37/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.37/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.37",
@@ -2791,9 +2729,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.38/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.38/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.38",
@@ -2817,9 +2753,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "45dfcd31c55f223e77f221150dc4bc0f6d520d7c",
         sha256: "7adadc0cac03f3a8ac484f6acaa092cab4f9328ffb16e353034719efce93359c",
-        text: include_str!(
-            "../data/2.38/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.38/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.38",
@@ -2915,9 +2849,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.39/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.39/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.39",
@@ -2941,9 +2873,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "45dfcd31c55f223e77f221150dc4bc0f6d520d7c",
         sha256: "7adadc0cac03f3a8ac484f6acaa092cab4f9328ffb16e353034719efce93359c",
-        text: include_str!(
-            "../data/2.39/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.39/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.39",
@@ -3031,9 +2961,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.40/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.40/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.40",
@@ -3057,9 +2985,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "45dfcd31c55f223e77f221150dc4bc0f6d520d7c",
         sha256: "7adadc0cac03f3a8ac484f6acaa092cab4f9328ffb16e353034719efce93359c",
-        text: include_str!(
-            "../data/2.40/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.40/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.40",
@@ -3147,9 +3073,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.41/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.41/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.41",
@@ -3173,9 +3097,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "45dfcd31c55f223e77f221150dc4bc0f6d520d7c",
         sha256: "7adadc0cac03f3a8ac484f6acaa092cab4f9328ffb16e353034719efce93359c",
-        text: include_str!(
-            "../data/2.41/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.41/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.41",
@@ -3263,9 +3185,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.42/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.42/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.42",
@@ -3289,9 +3209,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "45dfcd31c55f223e77f221150dc4bc0f6d520d7c",
         sha256: "7adadc0cac03f3a8ac484f6acaa092cab4f9328ffb16e353034719efce93359c",
-        text: include_str!(
-            "../data/2.42/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.42/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.42",
@@ -3379,9 +3297,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.43/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.43/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.43",
@@ -3405,9 +3321,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "dfd31ae94eabeba8cb2c8bb77ed2f6f1a9b58b4d",
         sha256: "b54bc791621c04caafdbe92f19d0bfc297551afe8d19884e4825f66f21af6904",
-        text: include_str!(
-            "../data/2.43/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.43/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.43",
@@ -3495,9 +3409,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist",
         blob: "f1d93631d07b990c54c5c322e5c7757bacf7ba97",
         sha256: "7928c2676f37ed27800ceb4a237a89d548ef3576c05f153047bafe8adc37bfb2",
-        text: include_str!(
-            "../data/2.44/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"
-        ),
+        text: include_str!("../data/2.44/sysdeps/unix/sysv/linux/x86_64/64/libBrokenLocale.abilist"),
     },
     AbiList {
         release: "2.44",
@@ -3521,9 +3433,7 @@ pub(crate) static ABILISTS: &[AbiList] = &[
         path: "sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist",
         blob: "dfd31ae94eabeba8cb2c8bb77ed2f6f1a9b58b4d",
         sha256: "b54bc791621c04caafdbe92f19d0bfc297551afe8d19884e4825f66f21af6904",
-        text: include_str!(
-            "../data/2.44/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"
-        ),
+        text: include_str!("../data/2.44/sysdeps/unix/sysv/linux/x86_64/64/libc_malloc_debug.abilist"),
     },
     AbiList {
         release: "2.44",

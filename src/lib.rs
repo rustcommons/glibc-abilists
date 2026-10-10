@@ -21,6 +21,8 @@
 //! assert_eq!(glibc_abilists::release("2.44").unwrap().tag, "glibc-2.44");
 //! ```
 
+// Written by the collector, which `--check`s it byte for byte.
+#[rustfmt::skip]
 mod generated;
 mod sha256;
 
