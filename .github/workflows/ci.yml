@@ -1,0 +1,44 @@
+name: CI
+on:
+  push:
+  pull_request:
+  schedule:
+    # Weekly: detect upstream tag or mirror changes affecting published data.
+    - cron: "17 5 * * 1"
+permissions:
+  contents: read
+jobs:
+  rust:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.99.0
+        with:
+          components: rustfmt, clippy
+      - run: cargo fmt --all -- --check
+      - run: cargo test --workspace --locked --offline
+      - run: cargo clippy --workspace --all-targets --locked --offline -- -D warnings
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.90.0
+      - run: cargo test --workspace --locked --offline
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.99.0
+      - run: cargo package --locked
+      - run: cargo package --list --locked | grep -v '^data/' ; cargo package --list --locked | grep -c '^data/'
+  upstream:
+    name: Data matches glibc's signed tags
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.99.0
+      - run: git clone --quiet --bare --filter=blob:none https://sourceware.org/git/glibc.git "$RUNNER_TEMP/glibc.git"
+      - run: cargo run --release --locked -p glibc-abilists-collector -- --glibc "$RUNNER_TEMP/glibc.git" --check

@@ -1,0 +1,19 @@
+version = 1
+
+[[annotations]]
+path = ["data/**", "src/**", "Cargo.toml", "README.md", "NOTICE.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Free Software Foundation, Inc. and the GNU C Library contributors; rustcommons contributors"
+SPDX-License-Identifier = "LGPL-2.1-or-later"
+
+[[annotations]]
+path = ["collector/**", "upstream.toml", ".github/**", "CLAUDE.md", "AGENTS.md", "docs/**", ".gitattributes", ".gitignore", "Cargo.lock", "REUSE.toml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "rustcommons contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["keys/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The respective key holders listed in keys/keys.tsv"
+SPDX-License-Identifier = "LicenseRef-public-key"
