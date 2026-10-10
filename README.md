@@ -65,7 +65,14 @@ Foundation, Inc. and the glibc contributors. The published crate, including
 its code, is distributed under the same license. The collector is MIT. See
 [NOTICE.md](NOTICE.md) and [REUSE.toml](REUSE.toml).
 
-The idea of a reusable glibc ABI dataset comes from the Zig project's
-[libc-abi-tools](https://codeberg.org/ziglang/libc-abi-tools) (as of commit
-[`9217cf899bf12bbb24a8a3de4cc2de682de0379d`](https://codeberg.org/ziglang/libc-abi-tools/src/commit/9217cf899bf12bbb24a8a3de4cc2de682de0379d)). This is an
-independent implementation that uses no Zig code or files.
+The idea of a reusable glibc ABI dataset comes from the Zig project. This is an
+independent implementation that uses no Zig code or files. The credit refers to:
+
+| | Tag | Release date | Full commit hash |
+| --- | --- | --- | --- |
+| [Zig](https://codeberg.org/ziglang/zig) (latest release) | [`0.17.0`](https://codeberg.org/ziglang/zig/src/tag/0.17.0) | 2026-10-01 | [`7647adab80dd088f4de3610fd245915a912eb6ad`](https://codeberg.org/ziglang/zig/commit/7647adab80dd088f4de3610fd245915a912eb6ad) |
+| [libc-abi-tools](https://codeberg.org/ziglang/libc-abi-tools) ("update to Zig 0.17.0") | none (the repository has no tags) | 2026-10-02 | [`9217cf899bf12bbb24a8a3de4cc2de682de0379d`](https://codeberg.org/ziglang/libc-abi-tools/commit/9217cf899bf12bbb24a8a3de4cc2de682de0379d) |
+
+Both are published under the same MIT License (an identical `LICENSE` file,
+git blob `9ce01373c89082fd81e8ea0793aab0978140526b`). See [NOTICE.md](NOTICE.md)
+for the full record.

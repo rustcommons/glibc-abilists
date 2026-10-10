@@ -40,8 +40,13 @@ not part of the published crate.
 The idea of keeping glibc's ABI lists as a reusable, versioned dataset comes
 from the **Zig project's** [libc-abi-tools](https://codeberg.org/ziglang/libc-abi-tools),
 as of commit `9217cf899bf12bbb24a8a3de4cc2de682de0379d` ("update to Zig
-0.17.0", 2026-10-02; [browse](https://codeberg.org/ziglang/libc-abi-tools/src/commit/9217cf899bf12bbb24a8a3de4cc2de682de0379d)), published under the MIT License
-(`LICENSE` git blob `9ce01373c89082fd81e8ea0793aab0978140526b`). This project
+0.17.0", 2026-10-02; that repository has no tags; [browse](https://codeberg.org/ziglang/libc-abi-tools/src/commit/9217cf899bf12bbb24a8a3de4cc2de682de0379d)), published under the MIT License
+(`LICENSE` git blob `9ce01373c89082fd81e8ea0793aab0978140526b`). That commit
+targets Zig's latest release, **0.17.0**: tag `0.17.0` (tag object
+`afee4225358129f909e01dfaed265dca0977befe`), commit
+`7647adab80dd088f4de3610fd245915a912eb6ad`, released 2026-10-01 (tagged
+2026-10-01T14:58:17-07:00 by Andrew Kelley; date confirmed by
+https://ziglang.org/download/index.json). This project
 is an independent implementation: it uses no Zig code or files, and its data
 comes directly from glibc. No endorsement by Zig or by the GNU project is
 implied.
