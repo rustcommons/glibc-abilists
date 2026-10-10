@@ -808,7 +808,22 @@ fn compare(
     for (rel, want) in outputs {
         match fs::read(root.join(rel)) {
             Ok(have) if &have == want => {}
-            Ok(_) => problems.push(format!("differs: {rel}")),
+            Ok(have) => {
+                let (have, want) = (
+                    String::from_utf8_lossy(&have),
+                    String::from_utf8_lossy(want),
+                );
+                let first = have
+                    .lines()
+                    .zip(want.lines())
+                    .enumerate()
+                    .find(|(_, (h, w))| h != w)
+                    .map(|(i, (h, w))| {
+                        format!("\n    line {}:\n      have: {h}\n      want: {w}", i + 1)
+                    })
+                    .unwrap_or_default();
+                problems.push(format!("differs: {rel}{first}"));
+            }
             Err(_) => problems.push(format!("missing: {rel}")),
         }
     }
