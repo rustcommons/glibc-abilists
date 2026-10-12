@@ -36,6 +36,8 @@ builds link-only glibc stubs for [cargo-libc](https://github.com/rustcommons/car
 | `keys/` | glibc release managers' public keys and where each was obtained |
 | `upstream.toml` | Upstream repository, mirrors, release range, and the file selection rule |
 
+Planned work is in [docs/ROADMAP.md](docs/ROADMAP.md).
+
 See [docs/PROVENANCE.md](docs/PROVENANCE.md) for what is recorded and what it
 proves. In short: every tag object agrees between sourceware and the GitHub
 mirror, 27 of 28 tag signatures verify (2.30's signing key is not published
