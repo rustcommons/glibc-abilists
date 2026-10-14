@@ -20,11 +20,17 @@
 //! assert!(libc.verify());
 //! assert_eq!(glibc_abilists::release("2.44").unwrap().tag, "glibc-2.44");
 //! ```
+#![warn(missing_docs)]
 
 // Written by the collector, which `--check`s it byte for byte.
 #[rustfmt::skip]
 mod generated;
 mod sha256;
+
+// The README's example runs as a doc test too.
+#[cfg(doctest)]
+#[doc = include_str!("../README.md")]
+struct ReadmeDoctests;
 
 /// The repository the data was collected from.
 pub const UPSTREAM: &str = "https://sourceware.org/git/glibc.git";
@@ -54,11 +60,14 @@ pub struct Release {
     pub tagger: &'static str,
     /// The tagger date (ISO 8601).
     pub tag_date: &'static str,
+    /// The result of checking the tag's OpenPGP signature.
     pub signature: Signature,
     /// The license file at this tag, after following links (glibc's README
     /// names `COPYING.LIB`).
     pub license_path: &'static str,
+    /// The license file's git blob id at the tag.
     pub license_blob: &'static str,
+    /// SHA-256 of the license file's contents.
     pub license_sha256: &'static str,
 }
 
@@ -67,7 +76,9 @@ pub struct Release {
 pub enum Signature {
     /// Verified with a key from `keys/` in the source repository.
     Verified {
+        /// Fingerprint of the key, or subkey, that made the signature.
         signing_key: &'static str,
+        /// Fingerprint of that key's primary key.
         primary_key: &'static str,
         /// Where the public key was obtained.
         key_source: &'static str,
@@ -76,7 +87,11 @@ pub enum Signature {
     },
     /// Signed, but the key is not available; recorded with the reason.
     Exception {
+        /// Fingerprint of the key that made the signature, as the signature
+        /// names it.
         signing_key: &'static str,
+        /// Why the key is not available and what is checked instead, from
+        /// `keys/exceptions.tsv` in the source repository.
         reason: &'static str,
     },
 }
@@ -111,7 +126,8 @@ pub fn releases() -> &'static [Release] {
     generated::RELEASES
 }
 
-/// The release for `version` (`2.17`), if collected.
+/// The release for `version` (`2.17`). Returns `None` for a version outside
+/// 2.17 through 2.44, or one not written as `2.N`.
 pub fn release(version: &str) -> Option<&'static Release> {
     generated::RELEASES.iter().find(|r| r.version == version)
 }
@@ -122,6 +138,8 @@ pub fn abilists() -> &'static [AbiList] {
 }
 
 /// The ABI list of `library` (`libc`, `ld`, `libm`, ...) in `version`.
+/// Returns `None` when the release is not collected, or when glibc has no ABI
+/// list for that library in that release (for example `libcrypt` after 2.38).
 pub fn abilist(version: &str, library: &str) -> Option<&'static AbiList> {
     generated::ABILISTS
         .iter()
@@ -151,6 +169,15 @@ mod tests {
                 assert!(abilist(r.version, lib).is_some(), "{} {lib}", r.version);
             }
         }
+    }
+
+    #[test]
+    fn lookups_return_none_outside_the_data() {
+        assert!(release("2.16").is_none() && release("2.45").is_none());
+        assert!(release("glibc-2.17").is_none());
+        assert!(abilist("2.38", "libcrypt").is_some());
+        assert!(abilist("2.39", "libcrypt").is_none());
+        assert!(abilist("2.17", "libnone").is_none());
     }
 
     #[test]
