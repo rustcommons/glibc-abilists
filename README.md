@@ -39,6 +39,7 @@ builds link-only glibc stubs for [cargo-libc](https://github.com/rustcommons/car
 | `upstream.toml` | Upstream repository, mirrors, release range, and the file selection rule |
 
 Planned work is in [docs/ROADMAP.md](docs/ROADMAP.md).
+The [next-release plan](https://github.com/rustcommons/glibc-abilists/blob/main/docs/RELEASE-PLAN.md) separates documentation cleanup from package and downstream releases.
 
 See [docs/PROVENANCE.md](docs/PROVENANCE.md) for what is recorded and what it
 proves. In short: every tag object agrees between sourceware and the GitHub
