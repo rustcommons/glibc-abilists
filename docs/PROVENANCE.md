@@ -19,9 +19,9 @@ does not prove.
 
 | Result | Meaning | Releases |
 | --- | --- | --- |
-| `verified` | Good signature; the key is valid today. | 2.19, 2.20, 2.23, 2.25, 2.26, 2.29, 2.31, 2.33, 2.38-2.44 |
+| `verified` | Good signature; the key was valid when collection verified it. | 2.19, 2.20, 2.23, 2.25, 2.26, 2.29, 2.31, 2.33, 2.38-2.44 |
 | `verified-key-expired-later` | Good signature made **before** the key expired. A signature made after expiry fails. | 2.17, 2.18, 2.21, 2.22, 2.24, 2.27, 2.28, 2.32, 2.34-2.37 |
-| `exception` | Signed, but the public key is not available; listed with its reason in `keys/exceptions.tsv`. | 2.30 |
+| `exception` | Signed, but the public key was unavailable during collection; listed with its reason in `keys/exceptions.tsv`. | 2.30 |
 
 A bad signature, a revoked key (`REVKEYSIG`), an expired signature, or an
 unverifiable tag missing from `keys/exceptions.tsv` stops collection.
@@ -61,9 +61,11 @@ listed directories that has `<library>.abilist`.
 ## Reproducing
 
 The collector regenerates everything from a glibc clone, and `--check`
-compares without writing. CI runs the check on every change. Collection
-needs `git`, `gpg`, and network access for the mirror comparison
-(`--offline` skips it).
+compares without rewriting repository data. CI runs the check on every change.
+See the [collection guide](COLLECTING.md) for prerequisites and commands.
+Collector `--offline` skips upstream/mirror comparisons; a partial clone can
+still fetch missing blobs. Signature results describe the collection check,
+not continuous verification of key status.
 
 ## What this does not prove
 

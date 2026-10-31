@@ -16,7 +16,7 @@ from glibc's signed release tags, with a complete provenance record. Its
 consumers are `libc-abi-tools` (rustcommons/linux-abi-tools) and, through it,
 `cargo-libc`.
 
-The project is green field. The idea of keeping glibc's ABI lists as a
+The idea of keeping glibc's ABI lists as a
 reusable dataset came from Zig's libc-abi-tools; no Zig code or files are
 used, and data is never taken from Zig or any other redistributor.
 
@@ -29,8 +29,8 @@ used, and data is never taken from Zig or any other redistributor.
 
 ## Scope and implementation
 
-- First release: glibc only, x86_64 (64-bit ABI) only, releases 2.17-2.44.
-  Other architectures and libc implementations come in later releases.
+- Current dataset: glibc only, x86_64 (64-bit ABI) only, releases 2.17-2.44.
+  Other architectures and libc implementations are planned.
 - Data comes only from glibc's upstream repository at release tags. Never edit
   files under `data/` or `src/generated.rs` by hand; rerun the collector.
 - Every release records its tag object, commit, tagger, signature result, and
@@ -51,8 +51,8 @@ For code changes and release qualification, run `cargo fmt --all -- --check`,
 `cargo test --workspace --locked --offline`,
 and `cargo clippy --workspace --all-targets --locked --offline -- -D warnings`.
 Data changes also require the collector's `--check` against a glibc clone
-(see README), and `cargo package --locked` for packaging changes. Never
-publish to crates.io without the user's go-ahead.
+(see [the collection guide](docs/COLLECTING.md)), and `cargo package --locked`
+for packaging changes. Never publish to crates.io without the user's go-ahead.
 
 ## Git conventions
 

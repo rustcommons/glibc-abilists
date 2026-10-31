@@ -4,8 +4,10 @@ Date: 2026-10-31. Status: proposed; no version bump or publication authorized.
 
 ## Scope and decision
 
-This change makes AGENTS.md authoritative and adds release planning links. It
-changes no API, data, generated tables, dependencies, or lock resolutions. Keep
+The documentation cleanup makes AGENTS.md authoritative, simplifies the README,
+adds consumer/collection guides and release planning links, and corrects stale
+wording and a manifest comment. It changes no API, data, generated tables,
+dependencies, or lock resolutions. Keep
 all generated data byte-for-byte unchanged. Do not manufacture a data refresh
 for a documentation release.
 
@@ -206,20 +208,22 @@ Consumers may need an explicit lock rollback to a known good allowed version,
 rebuild/reinstall, and provider regeneration or re-import. Do not assume yanking
 alone repairs them. Keep prior artifacts and qualification evidence identifiable.
 
-## Remaining documentation cleanup, in priority order
+## Documentation cleanup completed on 2026-10-31
 
-1. Add README dependency setup (`glibc-abilists = "0.1.1"` for the current
-   release) before the example; this is a library, not `cargo install` tooling.
-2. Move regeneration detail into a linked maintainer guide covering root working
-   directory, all collector options, rewrite behavior and validation. Keep the
-   purpose, short doctested example, dataset range and scope in the README.
-3. Add a small consumer guide for lookup/enumeration, absent libraries, raw-text
-   format changes, hash versus signature verification and `LICENSE_TEXT` when
-   redistributing. Keep API detail in rustdoc and evidence in PROVENANCE.md.
-4. Shorten README historical Zig attribution to a NOTICE.md link; replace
-   time-sensitive "latest release" and "key is valid today" with dated statements.
-   Keep the upstream-only origin, license split and 2.30 exception visible.
-5. Cargo.toml's comment still points to CLAUDE.md. It resolves through the shim,
-   but should point directly to AGENTS.md when manifest edits are authorized;
-   this task intentionally does not change manifests. REUSE.toml lists both
-   instruction filenames for licensing and should retain both.
+- [x] README dependency setup and current requirements, purpose, one unchanged
+  doctested example, and absolute GitHub links to excluded guides.
+- [x] [Collection guide](COLLECTING.md): prerequisites, working directory, all
+  options, offline limitations, destructive/non-atomic rewrite and validation.
+- [x] [Consumer guide](USAGE.md): lookups, raw formats, verification limits,
+  redistribution and links to the published API reference.
+- [x] Short README credit with historical facts retained in NOTICE.md; dated
+  signature interpretation and removal of stale latest/first-release wording.
+- [x] Cargo.toml's comment points to AGENTS.md. REUSE.toml still lists both
+  instruction files for licensing.
+
+This completes the scoped documentation cleanup, not the release gates above.
+The release remains proposed. GitHub readers get these guides without a
+crates.io release; the existing published 0.1.1 README remains unchanged until
+an explicitly authorized future package release. No generated data, dependency,
+package version, or lockfile was changed. Recheck the dated downstream and
+registry evidence when a release is actually scheduled.
