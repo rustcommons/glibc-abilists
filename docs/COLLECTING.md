@@ -28,29 +28,34 @@ an unused path for the upstream clone; `/tmp/glibc.git` is only an example.
 ## Collection flow and trust boundaries
 
 This diagram shows accepted collection paths and delivery to consumers, not
-runtime compatibility qualification. Online and offline collection share the
-signature attempt and license/file checks; only online mode compares remote tag
-objects. Rejected signatures and unlisted unverifiable tags stop collection.
+runtime compatibility qualification. The recorded upstream tags are signed;
+the collector requires annotated local tags, subject to the exception limits
+below. Online and offline collection share the signature attempt and
+license/file checks. Online compares upstream and available mirror tag objects;
+offline skips that gate and requires a trusted local clone. Rejected signatures
+and unlisted unverifiable tags stop collection.
 
 ```mermaid
 flowchart TD
-    U["Upstream glibc release tags<br/>Signed in the recorded dataset"] --> L["Local clone: annotated tags"]
-    L --> O["Online: compare tag objects with<br/>upstream and available mirror tags"]
-    L --> F["--offline: skip remote comparison<br/>Trusted local clone required"]
-    O --> S["Collector: git verify-tag"]
+    U["Upstream tags<br/>Signed dataset"] --> L["Local clone"]
+    L --> O["Online:<br/>compare tag IDs"]
+    L --> F["Offline:<br/>skip remote IDs"]
+    O --> S["Collector:<br/>git verify-tag"]
     F --> S
-    S --> V["Verified with checked-in keys"]
-    S --> E["Explicit tag/reason exception<br/>No signature-presence or key-match guarantee"]
-    V --> C["Collector: license checks,<br/>file selection and hashes"]
+    S --> V["Verified key"]
+    S --> E["Exception:<br/>no signer proof"]
+    V --> C["License / files<br/>and hashes"]
     E --> C
-    C --> Q["--check: compare expected bytes<br/>with existing outputs; no rewrite"]
-    C -->|write mode| D["Unmodified ABI text, provenance<br/>and generated tables"]
+    C --> Q["--check:<br/>compare only"]
+    C -->|write mode| D["ABI + provenance<br/>generated tables"]
     D -.->|existing outputs| Q
-    D --> B["Published library: immutable crate version<br/>Static data and lookups; verify hashes only"]
-    B --> T["libc-abi-tools, then cargo-libc"]
+    D --> B["Immutable crate<br/>static library"]
+    B --> T["libc-abi-tools<br/>then cargo-libc"]
 ```
 
-Outputs are `data/` and `src/generated.rs`; repository outputs can be
+The library exposes static data and lookups; `AbiList::verify()` checks hashes
+only. An exception guarantees neither signature presence nor a match to the
+configured key. Outputs are `data/` and `src/generated.rs`; repository outputs can be
 regenerated, while an already published crate version is immutable. Exception
 reasons are configuration, not attestations that fallback checks ran. In
 particular, offline exception-tag output is not authenticated by its hashes or
