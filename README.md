@@ -24,7 +24,7 @@ Requires **Rust 1.90 or later**. Add the library to your project's `Cargo.toml`:
 
 ```toml
 [dependencies]
-glibc-abilists = "0.1.1"
+glibc-abilists = "0.1.2"
 ```
 
 There are no crate dependencies, feature switches, or build script. Data is
@@ -42,11 +42,13 @@ println!("{} {} {:?}", release.tag, release.commit, release.signature);
 
 ## Guides
 
+- [Requirements and evidence](https://github.com/rustcommons/glibc-abilists/blob/main/docs/REQUIREMENTS.md): confirmed scope, verification limits, and documentation map.
+- [Documentation convention](https://github.com/rustcommons/.github/blob/main/docs/DOCUMENTATION.md): shared documentation and traceability conventions.
 - [Consumer guide](https://github.com/rustcommons/glibc-abilists/blob/main/docs/USAGE.md): lookups, raw formats, verification, and redistribution.
-- [API reference](https://docs.rs/glibc-abilists/0.1.1/glibc_abilists/): types, functions, and constants.
+- [API reference](https://docs.rs/glibc-abilists/0.1.2/glibc_abilists/): types, functions, and constants.
 - [Provenance](https://github.com/rustcommons/glibc-abilists/blob/main/docs/PROVENANCE.md): evidence and its limits. The recorded dataset has 27 verified tag signatures and one documented exception, glibc 2.30, whose signing key was unavailable during collection.
 - [Collection guide](https://github.com/rustcommons/glibc-abilists/blob/main/docs/COLLECTING.md): maintainer setup, checking, regeneration, and validation.
-- [Roadmap](https://github.com/rustcommons/glibc-abilists/blob/main/docs/ROADMAP.md) and [proposed release plan](https://github.com/rustcommons/glibc-abilists/blob/main/docs/RELEASE-PLAN.md).
+- [Roadmap](https://github.com/rustcommons/glibc-abilists/blob/main/docs/ROADMAP.md) and [release plan](https://github.com/rustcommons/glibc-abilists/blob/main/docs/RELEASE-PLAN.md).
 
 ## License and credit
 

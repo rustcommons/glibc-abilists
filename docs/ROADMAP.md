@@ -2,7 +2,7 @@
 
 Open product work is listed below. The completed documentation cleanup is
 recorded in the [release plan](RELEASE-PLAN.md#documentation-cleanup-completed-on-2026-10-31);
-release status remains proposed.
+the docs-only 0.1.2 candidate is tracked there pending review and publication.
 
 - [ ] Add each new glibc release (2.45 and later) when it is tagged: collect it with
   the collector, which checks its signature and provenance, and release a new

@@ -11,7 +11,7 @@ does not prove.
 | `commit`, `commit_date` | The commit the tag points to. Git object ids chain every file to it. |
 | `tagger`, `tag_date` | From the tag object. |
 | `signature` | `git verify-tag` with only the keys in `keys/`. See below. |
-| `signing_key`, `primary_key` | The (sub)key that made the signature and its primary key. |
+| `signing_key`, `primary_key` | For verified signatures, the signing (sub)key and its primary key. For exceptions, `signing_key` is GPG's reported `ERRSIG` key, possibly empty, not a verified signer identity; `primary_key` is empty. |
 | `key_source_or_reason` | Where the key was obtained (`keys/keys.tsv`), or the reason for an exception. |
 | `license_path`, `license_blob`, `license_sha256`, `license_spdx` | glibc's README must say "See the file COPYING.LIB for copying conditions"; `COPYING.LIB` is resolved through in-tree links and must be the GNU LGPL version 2.1. |
 
@@ -57,7 +57,7 @@ Findings while assembling the keys (2026-10-10):
 | Field | Meaning |
 | --- | --- |
 | `path` | The path in glibc's tree at the tag. |
-| `blob` | The git blob id: the SHA-1 of the object that the signed tag's tree names. |
+| `blob` | The git blob id: the SHA-1 of the file object in the annotated tag's commit tree. |
 | `sha256` | SHA-256 of the contents, checked again by the crate's tests and `AbiList::verify`. |
 | `bytes` | Size. |
 | `modified` | Always `no`: files are copied byte for byte. |

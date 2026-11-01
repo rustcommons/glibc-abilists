@@ -1,7 +1,7 @@
 # Using the ABI lists
 
 Start with the dependency and example in the [README](../README.md#getting-started).
-The [0.1.1 API reference](https://docs.rs/glibc-abilists/0.1.1/glibc_abilists/)
+The [0.1.2 API reference](https://docs.rs/glibc-abilists/0.1.2/glibc_abilists/)
 documents every public item. The crate needs Rust 1.90 or later; its embedded
 dataset describes x86_64's 64-bit Linux ABI regardless of the consuming host.
 The collector's Linux/WSL and Git/GPG requirements do not apply to consumers.
@@ -38,6 +38,8 @@ embedded record. It does not contact upstream or verify a tag signature at
 runtime. `Release::signature` records the collector's result: either
 `Signature::Verified` (including whether the key expired later), or
 `Signature::Exception` with a reason. glibc 2.30 is the documented exception.
+An exception does not establish signature presence or a match to the configured
+key; its reported key can be empty and its reason is not a per-run attestation.
 See [Provenance](PROVENANCE.md) before interpreting these records as evidence.
 
 The lists are upstream declarations; they do not prove runtime behavior or

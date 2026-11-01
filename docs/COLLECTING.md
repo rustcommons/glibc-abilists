@@ -112,7 +112,7 @@ review `upstream.toml`, key sources and license evidence. Regenerate, then updat
 range-specific tests, API documentation and scope statements to match. The
 collector currently rejects targets other than `x86_64-linux-gnu`; changing the
 configuration alone does not add architecture support. Follow the
-[proposed release plan](RELEASE-PLAN.md) for downstream qualification.
+[release plan](RELEASE-PLAN.md) for downstream qualification.
 
 ## Validate the change
 
