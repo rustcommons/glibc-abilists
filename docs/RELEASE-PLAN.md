@@ -210,6 +210,13 @@ alone repairs them. Keep prior artifacts and qualification evidence identifiable
 
 ## Documentation cleanup completed on 2026-10-31
 
+Follow-up on 2026-11-01: repository API documentation for `Signature::Exception`
+now describes a recorded explicit verification exception without implying a
+verified signature or a match to the configured key. Published 0.1.1 API docs
+remain immutable; distributing this correction requires a future, separately
+authorized docs-only release. This closure patch needs no version bump,
+publication, or downstream lock changes.
+
 - [x] README dependency setup and current requirements, purpose, one unchanged
   doctested example, and absolute GitHub links to excluded guides.
 - [x] [Collection guide](COLLECTING.md): prerequisites, working directory, all
