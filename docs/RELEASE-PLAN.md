@@ -1,6 +1,23 @@
 # Release plan
 
-## 0.1.2 documentation release candidate — 2026-11-01
+## 0.1.2 released — 2026-11-01
+
+The coordinator published 0.1.2 from
+`d0cf8ee40529880373286c500dd22b9c21d79e2c`; tag `v0.1.2` points to that
+exact commit. The non-yanked official archive and rendered docs.rs API docs were
+independently verified. The corrected README/API documentation is delivered now,
+including the `Signature::Exception` clarification. No further package release
+is needed to distribute this correction. Published 0.1.1 remains immutable.
+
+See the [0.1.2 release record](RELEASE-0.1.2.md) for checksum, payload/VCS proof,
+CI references, docs.rs build and rendered wording evidence, and bounded gaps.
+No downstream minimum requirement or lock update is required solely for this
+docs-only release; consumers may deliberately adopt it in their own locks.
+
+## Historical 0.1.2 candidate process — 2026-11-01
+
+The following candidate instructions record the pre-publication process.
+The released status above supersedes their pending gates and future actions.
 
 Preparation is authorized. Independent reviewer GO and coordinator GO are required
 before normal merge. The coordinator alone publishes using existing local Cargo
@@ -34,7 +51,7 @@ These are bounded checks, not universal runtime compatibility qualification.
 
 The remaining sections preserve the earlier proposal and its dated evidence.
 Their versions, recommendation to defer, and authorization statements describe
-that historical snapshot; the 0.1.2 candidate section above is the current plan.
+that historical snapshot; the released-status section above is current.
 Recheck external versions before any future dependency/release decision.
 
 Date: 2026-10-31. Status: proposed; no version bump or publication authorized.
