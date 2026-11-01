@@ -1,4 +1,41 @@
-# Next release plan
+# Release plan
+
+## 0.1.2 documentation release candidate — 2026-11-01
+
+Preparation is authorized. Independent reviewer GO and coordinator GO are required
+before normal merge. The coordinator alone publishes using existing local Cargo
+credentials; no publication or tag has occurred as part of candidate preparation.
+After confirmed publication, tag `v0.1.2` at the exact released commit and verify
+the official archive/checksum and corrected docs.rs `Signature::Exception` docs.
+Repackage the clean merged commit before publication so VCS metadata is correct.
+
+Release notes: previous `Signature::Exception` API wording overstated signature
+guarantees. The existing collector never required signature presence or a match
+to the configured exception key on this path. The corrected docs describe the
+recorded explicit verification exception and the limits of its fields. This is
+not a claim of data compromise. The release also ships the current README and
+links to the audited repository guides and requirements index.
+
+Only documentation, Rust doc comments, and package version/lock metadata change.
+Exported API and behavior, generated source, ABI data, keys, collector policy,
+and upstream selection must remain unchanged against published 0.1.1. No
+regeneration, downstream requirement/lock update, or downstream release is needed
+solely for docs-only 0.1.2. Published 0.1.1 artifacts remain immutable.
+
+Candidate evidence and exact PR/head are recorded in the PR; see
+[requirements and evidence](REQUIREMENTS.md). Run Rust 1.90 tests (including
+README/API doctests), fmt, Clippy, warning-denied rustdoc and package inspection,
+and require applicable final-candidate CI, including the online provenance check.
+Compare with the official 0.1.1 archive and its recorded VCS commit. Confirm the
+allowed file diff, package contents and unchanged non-documentation Rust source.
+These are bounded checks, not universal runtime compatibility qualification.
+
+## Historical planning record — 2026-10-31
+
+The remaining sections preserve the earlier proposal and its dated evidence.
+Their versions, recommendation to defer, and authorization statements describe
+that historical snapshot; the 0.1.2 candidate section above is the current plan.
+Recheck external versions before any future dependency/release decision.
 
 Date: 2026-10-31. Status: proposed; no version bump or publication authorized.
 

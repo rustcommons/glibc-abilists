@@ -12,7 +12,8 @@
 
 `glibc-abilists` publishes the GNU C Library's own ABI list files
 (`*.abilist`) for x86_64 Linux, glibc 2.17 through 2.44, collected directly
-from glibc's signed release tags, with a complete provenance record. Its
+from glibc's release tags, with recorded provenance evidence and the limits
+described in [Provenance](docs/PROVENANCE.md). Its
 consumers are `libc-abi-tools` (rustcommons/linux-abi-tools) and, through it,
 `cargo-libc`.
 
@@ -36,9 +37,11 @@ used, and data is never taken from Zig or any other redistributor.
 - Every release records its tag object, commit, tagger, signature result, and
   license evidence. Every file records its tree path, git blob id, SHA-256, and
   size. The collector fails closed: a bad signature, a changed license file, a
-  mirror disagreement, or a new unverifiable tag stops collection.
+  mirror disagreement in online mode, or a new unverifiable tag stops collection.
+  Offline mode skips remote comparisons, including in write mode.
 - An unverifiable signature is allowed only when listed with its reason in
-  `keys/exceptions.tsv`.
+  `keys/exceptions.tsv`. This exception path does not require signature presence
+  or match the configured key; recorded historical evidence is not enforcement.
 - Files are copied unmodified. If a derived form is ever added, label it as
   modified, with the date, as the LGPL requires.
 - Std-only Rust for both the crate and the collector. The collector may call
@@ -53,6 +56,15 @@ and `cargo clippy --workspace --all-targets --locked --offline -- -D warnings`.
 Data changes also require the collector's `--check` against a glibc clone
 (see [the collection guide](docs/COLLECTING.md)), and `cargo package --locked`
 for packaging changes. Never publish to crates.io without the user's go-ahead.
+
+## Documentation and requirements traceability
+
+- Follow the [Rust Commons documentation conventions](https://github.com/rustcommons/.github/blob/main/docs/DOCUMENTATION.md).
+- Maintain [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) as the repository's index of confirmed requirements, their sources, implementation or documentation, verification evidence, and gaps. Preserve stable repository-scoped IDs and existing identifiers; never renumber or reuse them.
+- Distinguish verified behavior, partial verification, planned work, deferred work, and scope exclusions. A source reference or passing test supports only the scope it actually checks; record missing evidence explicitly.
+- Keep the README focused on purpose, prerequisites, setup, and guide links. Keep detailed workflows in maintained guides, future work in the roadmap, and dated release or validation evidence identifiable as historical records.
+- Update affected requirements, documentation, and trace links together when behavior, scope, interfaces, prerequisites, or validation changes. Use exact versions or revisions for release evidence, and do not rewrite historical outcomes or treat repository edits as changes to an immutable published package.
+- Validate documentation changes with source and command checks, links, rendering, and a clean diff. Run additional builds or tests only when changed examples, package contents, or behavior require them.
 
 ## Git conventions
 
