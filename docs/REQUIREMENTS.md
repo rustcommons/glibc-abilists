@@ -16,6 +16,13 @@ Final 0.1.2 candidate commands, results and exact head belong in the release PR;
 they have not yet run for this candidate at the time of this index's preparation.
 No test count establishes universal compatibility or upstream authenticity.
 
+Shared-link resolution on 2026-11-01: the convention was unavailable on central
+`main` during index preparation. It is now live at rustcommons/.github commit
+`c8a0b9c01aae5657dd0ef649bd37b18d81919ce5`. The Contents API confirms
+`docs/DOCUMENTATION.md` (blob `1b659ff536d43bcae5b09626069e89488058ba6f`),
+and its final GitHub URL returns HTTP 200. This resolves the initial shared-link
+gap without changing the earlier preparation observations or shared AGENTS text.
+
 ## Requirements
 
 | ID | Requirement and source | Implementation / documentation | Verification evidence | Status and gaps |
@@ -31,7 +38,7 @@ No test count establishes universal compatibility or upstream authenticity.
 | GA-REQ-009 | Never hand-edit data/generated tables; compare without rewriting via `--check`; AGENTS. | Collector `render`, `compare`, `write`; [rewrite warning](COLLECTING.md#rewrite-deliberately). | Baseline CI online `--check`; source inspection on 2026-11-01 confirms destructive, non-atomic write path. | Implemented—partial verification: no fault-injection/atomicity testing; no regeneration authorized for 0.1.2. |
 | GA-REQ-010 | Preserve LGPL data/crate and MIT collector license/notice policy; AGENTS and REUSE. | `LICENSES/`, `NOTICE.md`, `REUSE.toml`, `LICENSE_TEXT`; [redistribution](USAGE.md#redistribute-files). | Baseline CI: `license_text_is_the_lgpl_2_1`, package job; candidate archive license/include inspection pending. | Verified (bounded named evidence): baseline license marker/package checks; not a legal review. |
 | GA-REQ-011 | Package the library/data/README/notices/licenses; exclude collector, keys and repository-only guides; manifest include list. | `Cargo.toml`; absolute GitHub guide links in README; [release plan](RELEASE-PLAN.md). | Baseline CI `cargo package --locked` and `cargo package --list --locked`; candidate archive/links and clean merged VCS metadata still to verify. | Implemented—partial verification: final candidate and post-merge package inspection pending. |
-| GA-REQ-012 | Keep AGENTS primary, CLAUDE an exact shim, no attribution; existing repository conventions. | [AGENTS](../AGENTS.md), [CLAUDE](../CLAUDE.md), [shared documentation convention](https://github.com/rustcommons/.github/blob/main/docs/DOCUMENTATION.md). | File/diff inspection against baseline on 2026-11-01; shared convention's main link pending central merge. | Implemented—partial verification: final shared-link validation pending; no tool identity belongs in repository artifacts. |
+| GA-REQ-012 | Keep AGENTS primary, CLAUDE an exact shim, no attribution; existing repository conventions. | [AGENTS](../AGENTS.md), [CLAUDE](../CLAUDE.md), [shared documentation convention](https://github.com/rustcommons/.github/blob/main/docs/DOCUMENTATION.md). | File/diff inspection against baseline on 2026-11-01; `gh api repos/rustcommons/.github/contents/docs/DOCUMENTATION.md` confirms the live file at central commit `c8a0b9c01aae5657dd0ef649bd37b18d81919ce5`; final GitHub URL HTTP 200 on 2026-11-01. | Verified (bounded named evidence): instruction/shim diff and final shared-link checks; no tool identity belongs in repository artifacts. |
 | GA-REQ-013 | Consider separate online/offline validation evidence and exception signature/key enforcement only after a policy decision; roadmap. | [Offline provenance follow-up](ROADMAP.md#offline-provenance-follow-up). | No implementation or acceptance runs; roadmap is a decision proposal. | Planned: no new validation schema or enforcement authorized by this documentation release. |
 | GA-REQ-014 | Other architectures/libcs and later glibc releases are future work; roadmap and current selection. | [Roadmap](ROADMAP.md); collector rejects other targets. | `upstream.toml`/parser inspection on 2026-11-01; no target/runtime qualification beyond current scope. | Planned: no additional dataset or compatibility claim. |
 | GA-REQ-015 | Runtime compatibility certification, parsing, stub generation and installation are outside this library's role; README. | [Consumer guide](USAGE.md#read-raw-text), raw accessor API. | API/source inspection on 2026-11-01; not a runtime qualification suite. | Not applicable: no such features or guarantees are required of this crate. |
