@@ -25,7 +25,12 @@ See the [next-release plan](RELEASE-PLAN.md) for scope, dependency order, and re
   online/offline check and write paths, including glibc 2.30's exception; prove
   that an offline record cannot imply completed remote verification, and that
   stale evidence cannot silently apply to changed outputs. Document any remaining
-  local-clone trust requirement. The current behavior and CI mitigation are
+  local-clone trust requirement. As part of this task, evaluate whether exception
+  handling should require a signature and match the configured signing key;
+  cover unsigned annotated tags, missing GPG key information and mismatched
+  keys in proposed acceptance tests. Such enforcement would change the current
+  exception contract and needs an explicit policy decision before implementation.
+  The current behavior and CI mitigation are
   explained in [Provenance](PROVENANCE.md#offline-collection-and-trust).
 
 This is collector hardening/documentation follow-up, not a confirmed library

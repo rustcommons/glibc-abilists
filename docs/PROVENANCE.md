@@ -21,10 +21,17 @@ does not prove.
 | --- | --- | --- |
 | `verified` | Good signature; the key was valid when collection verified it. | 2.19, 2.20, 2.23, 2.25, 2.26, 2.29, 2.31, 2.33, 2.38-2.44 |
 | `verified-key-expired-later` | Good signature made **before** the key expired. A signature made after expiry fails. | 2.17, 2.18, 2.21, 2.22, 2.24, 2.27, 2.28, 2.32, 2.34-2.37 |
-| `exception` | Signed, but the public key was unavailable during collection; listed with its reason in `keys/exceptions.tsv`. | 2.30 |
+| `exception` | Verification did not succeed and the tag is listed in `keys/exceptions.tsv`. For the recorded 2.30 collection, historical evidence identifies a signed tag whose public key was unavailable; this is not an enforced signature-presence or key-identity guarantee. | 2.30 |
 
 A bad signature, a revoked key (`REVKEYSIG`), an expired signature, or an
 unverifiable tag missing from `keys/exceptions.tsv` stops collection.
+
+The exception path looks up the tag name and reason; it does not enforce the
+`signing_key` column in `keys/exceptions.tsv` or require a signature to be
+present. When available, it records the key reported by GPG's `ERRSIG`; otherwise
+that field can be empty. An unsigned annotated tag can therefore take this path,
+subject to the remaining checks (including remote identity comparison online).
+The recorded historical evidence below must not be read as stronger enforcement.
 
 Findings while assembling the keys (2026-10-10):
 
