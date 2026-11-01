@@ -67,7 +67,25 @@ cargo run --release --locked --offline -p glibc-abilists-collector -- --glibc /t
 ```
 
 This skips independent upstream/mirror comparison and is not a substitute for
-the normal online release provenance gate. Signature and license checks remain.
+the normal online release provenance gate. Signature verification is attempted
+and license checks remain, but the documented signature exception still applies.
+
+### Offline validation evidence
+
+Offline write remains supported: `--offline` is independent of `--check`.
+In particular, glibc 2.30 can pass via its exception without a verified signature
+or remote tag-identity comparison. Use a trusted local clone; hashes and license
+checks do not authenticate an untrusted replacement for that tag. The generated
+provenance does not mark skipped remote checks, and the copied exception reason
+must not be read as proof that mirror agreement was checked in that run.
+
+Treat offline regeneration as provisional until the online `--check` shown
+above passes against a trusted upstream clone for the candidate outputs. Retain
+that validation result with the exact candidate commit. Rechecking offline
+against freshly rewritten output is only a consistency check. An independently
+trusted checkout is needed for an offline comparison to provide additional
+evidence. See [offline collection and trust](PROVENANCE.md#offline-collection-and-trust)
+for the scope of the existing CI mitigation and the planned follow-up.
 
 ## Rewrite deliberately
 

@@ -7,7 +7,7 @@ does not prove.
 
 | Field | How it is established |
 | --- | --- |
-| `tag`, `tag_object` | The annotated tag in the local clone. The same object id is required at `https://sourceware.org/git/glibc.git` for every tag, and at each mirror in `upstream.toml` that has the tag (`git ls-remote`). |
+| `tag`, `tag_object` | The annotated tag in the local clone. In online mode, the same object id is required at `https://sourceware.org/git/glibc.git` for every tag, and at each mirror in `upstream.toml` that has the tag (`git ls-remote`); `--offline` skips these comparisons. |
 | `commit`, `commit_date` | The commit the tag points to. Git object ids chain every file to it. |
 | `tagger`, `tag_date` | From the tag object. |
 | `signature` | `git verify-tag` with only the keys in `keys/`. See below. |
@@ -66,6 +66,40 @@ See the [collection guide](COLLECTING.md) for prerequisites and commands.
 Collector `--offline` skips upstream/mirror comparisons; a partial clone can
 still fetch missing blobs. Signature results describe the collection check,
 not continuous verification of key status.
+
+## Offline collection and trust
+
+Both check and write modes accept `--offline`. It skips upstream/mirror tag
+comparison, not the attempt to verify signatures. For tags with verified
+signatures, that verification still provides evidence from the checked-in keys.
+For the documented glibc 2.30 exception, however, collection can proceed without
+a verified signature **and** without comparing the local tag object to upstream.
+The exception reason's statement that mirror agreement is required describes
+the online provenance gate; an offline run does not establish that agreement.
+
+The collector still requires an annotated tag and checks license evidence and
+file identities/hashes. Those checks alone cannot authenticate a substituted
+local tag or its contents. An untrusted or altered clone can therefore supply
+exception-tag data that offline write accepts, subject to the remaining checks.
+This is a collection-input trust limitation, not evidence that the checked-in
+dataset has been altered or a runtime verification feature of the library.
+
+`data/releases.tsv` and the generated Rust records contain identities and
+signature results but no field indicating whether remote comparisons ran.
+Identical inputs produce identical records online and offline. A signature
+exception reason is copied from configuration, not a per-run attestation that
+its fallback comparison succeeded. Offline `--check` against an independently
+trusted checkout can detect differences, but comparing outputs just rewritten
+from the same untrusted clone supplies no independent authenticity evidence.
+
+Before accepting regenerated data for release, run the normal online `--check`
+against a trusted upstream clone and retain the successful validation evidence
+for the exact candidate commit. The existing CI performs an online check on
+pushes, pull requests and a weekly schedule; it mitigates this limitation for
+the commits it checks, but does not authenticate arbitrary offline outputs or
+prevent someone from using them before CI. See the
+[collection guide](COLLECTING.md#offline-validation-evidence) and the
+[planned follow-up](ROADMAP.md#offline-provenance-follow-up).
 
 ## What this does not prove
 
