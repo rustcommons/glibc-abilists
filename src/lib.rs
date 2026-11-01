@@ -85,13 +85,14 @@ pub enum Signature {
         /// The key has expired since; the signature was made before that.
         key_expired_later: bool,
     },
-    /// Signed, but the key is not available; recorded with the reason.
+    /// An explicit verification exception recorded with its reason.
+    /// This does not establish signature presence or a match to the configured key.
     Exception {
-        /// Fingerprint of the key that made the signature, as the signature
-        /// names it.
+        /// Key reported by GPG's `ERRSIG`, or empty if unavailable.
+        /// This is not a verified signer identity.
         signing_key: &'static str,
-        /// Why the key is not available and what is checked instead, from
-        /// `keys/exceptions.tsv` in the source repository.
+        /// Configured reason from `keys/exceptions.tsv` in the source repository,
+        /// not an attestation that fallback checks ran.
         reason: &'static str,
     },
 }
