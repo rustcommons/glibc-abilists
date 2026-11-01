@@ -37,7 +37,7 @@ and unlisted unverifiable tags stop collection.
 
 ```mermaid
 flowchart TD
-    U["Upstream tags<br/>Signed dataset"] --> L["Local clone"]
+    U["Signed glibc<br/>release tags"] --> L["Local clone"]
     L --> O["Online:<br/>compare tag IDs"]
     L --> F["Offline:<br/>skip remote IDs"]
     O --> S["Collector:<br/>git verify-tag"]
