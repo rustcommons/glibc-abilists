@@ -37,7 +37,7 @@ and unlisted unverifiable tags stop collection.
 
 ```mermaid
 flowchart TD
-    U["Signed glibc<br/>release tags"] --> L["Local clone"]
+    U["Upstream glibc<br/>release tags"] --> L["Local clone"]
     L --> O["Online:<br/>compare tag IDs"]
     L --> F["Offline:<br/>skip remote IDs"]
     O --> S["Collector:<br/>git verify-tag"]
@@ -49,7 +49,7 @@ flowchart TD
     C --> Q["--check:<br/>compare only"]
     C -->|write mode| D["ABI + provenance<br/>generated tables"]
     D -.->|existing outputs| Q
-    D --> B["Immutable crate<br/>static library"]
+    D --> B["Published crate<br/>embedded data API"]
     B --> T["libc-abi-tools<br/>→ cargo-libc"]
 ```
 
