@@ -25,6 +25,46 @@ an unused path for the upstream clone; `/tmp/glibc.git` is only an example.
 | `src/generated.rs` | Generated tables embedding the data |
 | `collector/src/main.rs` | Option parser, validation, collection, comparison, and writing |
 
+## Collection flow and trust boundaries
+
+This diagram shows accepted collection paths and delivery to consumers, not
+runtime compatibility qualification. The recorded upstream tags are signed;
+the collector requires annotated local tags, subject to the exception limits
+below. Online and offline collection share the signature attempt and
+license/file checks. Online compares upstream and available mirror tag objects;
+offline skips that gate and requires a trusted local clone. Rejected signatures
+and unlisted unverifiable tags stop collection.
+
+```mermaid
+flowchart TD
+    U["Upstream glibc<br/>release tags"] --> L["Local clone"]
+    L --> O["Online:<br/>compare tag IDs"]
+    L --> F["Offline:<br/>skip remote IDs"]
+    O --> S["Collector:<br/>git verify-tag"]
+    F --> S
+    S --> V["Verified<br/>signature"]
+    S --> E["Exception:<br/>no signer proof"]
+    V --> C["License / files<br/>and hashes"]
+    E --> C
+    C --> Q["--check:<br/>compare only"]
+    C -->|write mode| D["ABI + provenance<br/>generated tables"]
+    D -.->|existing outputs| Q
+    D --> B["Published crate<br/>embedded data API"]
+    B --> T["libc-abi-tools<br/>→ cargo-libc"]
+```
+
+The library exposes static data and lookups; `AbiList::verify()` checks hashes
+only. An exception guarantees neither signature presence nor a match to the
+configured key. Outputs are `data/` and `src/generated.rs`; repository outputs can be
+regenerated, while an already published crate version is immutable. Exception
+reasons are configuration, not attestations that fallback checks ran. In
+particular, offline exception-tag output is not authenticated by its hashes or
+license checks. See [Provenance](PROVENANCE.md#offline-collection-and-trust).
+
+Traceability: [GA-REQ-006, GA-REQ-007, GA-REQ-008 and GA-REQ-009](REQUIREMENTS.md#requirements)
+cover collection/check boundaries; [GA-REQ-001, GA-REQ-003, GA-REQ-005 and GA-REQ-011](REQUIREMENTS.md#requirements)
+cover the selected data, library access, evidence and package boundary.
+
 ## Check without rewriting data
 
 ```sh

@@ -51,7 +51,7 @@ gap without changing the earlier preparation observations or shared AGENTS text.
 | --- | --- |
 | [README](../README.md) | Purpose, Rust prerequisite, dependency setup/example, absolute guide links for package readers. |
 | [Consumer guide](USAGE.md) and API rustdoc in `src/lib.rs` | Lookup/raw formats, evidence interpretation, redistribution. |
-| [Collection guide](COLLECTING.md) | Maintainer tools, commands, offline limits, non-atomic regeneration warning, validation. |
+| [Collection guide](COLLECTING.md) | [Collection flow and trust boundaries](COLLECTING.md#collection-flow-and-trust-boundaries), maintainer tools, commands, offline limits, non-atomic regeneration warning, validation. |
 | [Provenance](PROVENANCE.md) | Recorded evidence versus enforcement, historical key findings and offline trust limits. |
 | [Roadmap](ROADMAP.md) | Unimplemented work and policy decisions. |
 | [Release plan](RELEASE-PLAN.md) and [0.1.2 release record](RELEASE-0.1.2.md) | Published status, exact artifact/docs evidence and separately labeled historical planning/candidate evidence. |
