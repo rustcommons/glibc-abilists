@@ -42,7 +42,7 @@ flowchart TD
     L --> F["Offline:<br/>skip remote IDs"]
     O --> S["Collector:<br/>git verify-tag"]
     F --> S
-    S --> V["Verified key"]
+    S --> V["Verified<br/>signature"]
     S --> E["Exception:<br/>no signer proof"]
     V --> C["License / files<br/>and hashes"]
     E --> C
@@ -50,7 +50,7 @@ flowchart TD
     C -->|write mode| D["ABI + provenance<br/>generated tables"]
     D -.->|existing outputs| Q
     D --> B["Immutable crate<br/>static library"]
-    B --> T["libc-abi-tools<br/>then cargo-libc"]
+    B --> T["libc-abi-tools<br/>→ cargo-libc"]
 ```
 
 The library exposes static data and lookups; `AbiList::verify()` checks hashes
