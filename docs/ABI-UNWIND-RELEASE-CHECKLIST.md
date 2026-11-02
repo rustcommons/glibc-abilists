@@ -84,6 +84,14 @@ certifies runtime compatibility or distribution-patched glibc behavior.
 - [ ] Producer: exercise the implementation's ABI/provider-to-runtime preparation
   and link path against the candidate inputs; record selected runtime artifacts,
   symbol/version bindings, outputs and hashes. Capture relevant fresh tests.
+- [ ] For a new glibc ABI/source bundle, record signed upstream source refs and
+  review relevant runtime-unwind diffs beyond exports/collected files, including
+  `misc/unwind-link.c`, `nptl/unwind.c`, pthread exit/cancellation, backtrace and
+  dlsym/SONAME behavior. The source pack contains minimal startup/nonshared/header
+  inputs, not the full glibc implementation; no collected-file diff does not prove
+  those runtime paths unchanged. Record distro build/patch/config differences
+  and remaining real-runtime coverage gaps. Link checks do not execute old libc;
+  unavailable Tier 3 runtime coverage stays an explicit gap, not a new blocker.
 - [ ] Cargo supported standalone executables: record the runtime choice only
   after user decision, retaining dynamic glibc and `panic=unwind`; no LLVM default
   is approved now. Run the final driver's supported unwind/panic/cleanup cases
