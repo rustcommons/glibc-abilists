@@ -97,7 +97,12 @@ credentials are required for public read access. Explicitly dispatch the workflo
 with `verify_published=true` as well. Record the GitHub URL/publication timestamp
 and exact documentation commit in the requirements/release evidence. Keep old artifact/test outcomes identifiable.
 
-As of the 2026-11-02 inventory, all three crates are available and non-yanked,
-but GitHub Release entries are absent. This PR prepares their backfill; it does
-not claim completion before approved publication. Existing 0.1.2 records prove
-crate/tag/API-doc delivery, not the new GitHub Release documentation gate.
+The initial 2026-11-02 inventory found no GitHub Release entries. The approved
+backfill is now complete: v0.1.0, v0.1.1 and v0.1.2 have exact committed notes,
+unchanged source tags and zero assets, with v0.1.2 latest. Bootstrap and full
+published-verification workflows passed after merge
+`5c180bd6985f8e9ee9fff54f3291ffe8f8a58da0`; see the dated
+[completion evidence](RELEASE-HISTORY-20261102.md#completed-backfill-and-verification).
+The initial registration 404 and transient unauthenticated API failure remain
+historical observations. Existing 0.1.2 artifact records remain unchanged; this
+evidence additionally covers GitHub Release documentation completion.

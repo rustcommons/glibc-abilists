@@ -2,15 +2,20 @@
 
 ## Release-documentation completion — 2026-11-02
 
-The existing crate/tag/API-doc delivery evidence below remains valid. Under the
-new [release policy](RELEASING.md), completion also requires live GitHub Release
-notes. Entries for existing 0.1.0, 0.1.1 and 0.1.2 tags are being backfilled from
-[changelog](../CHANGELOG.md) and [historical evidence](RELEASE-HISTORY-20261102.md);
-GitHub publication is pending reviewer/coordinator GO. The first-install
-workflow bootstrap requires independent review of local checker/syntax evidence,
-a normal registration merge, then a mandatory green post-merge docs workflow
-before any notes are published. No candidate CI pass is claimed from the initial
-registration 404. No new package release or tag change is needed. This status does not rewrite the original validation.
+The [release-policy](RELEASING.md) documentation gate is complete for existing
+0.1.0, 0.1.1 and 0.1.2 tags. Reviewed bootstrap merge
+`5c180bd6985f8e9ee9fff54f3291ffe8f8a58da0` registered the workflow;
+[bootstrap run 41387759314](https://github.com/rustcommons/glibc-abilists/actions/runs/41387759314)
+succeeded before notes publication. The three live bodies match their committed
+files, source tags are unchanged, v0.1.2 is latest and all Releases have zero
+assets. Authenticated `--published` and
+[full verification run 41387980296](https://github.com/rustcommons/glibc-abilists/actions/runs/41387980296)
+passed. See [dated completion evidence](RELEASE-HISTORY-20261102.md#completed-backfill-and-verification).
+
+Preparation, the registration 404 and transient API failure remain historical;
+no candidate CI pass is retroactively claimed. Existing crate/tag/API-doc
+validation below remains valid. No new crate publication, version change or tag
+movement was needed.
 
 ## 0.1.2 released — 2026-11-01
 
