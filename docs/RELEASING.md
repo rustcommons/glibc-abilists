@@ -17,9 +17,22 @@ and `docs/releases/vX.Y.Z.md` with a version title, concise outcome, and these
 four sections: Changes, Upgrade, Validation and limits, Links. State the actual
 package identity, source tag/commit, dependency impact and known limits. Link
 the detailed qualification evidence rather than substituting logs for release
-notes. Run the release-documentation checker and its CI workflow before merge.
-The shared checker/workflow is being integrated for this remediation; its
-candidate result must be recorded in the review PR before approval.
+notes. Run the Python 3.11+ standard-library-only checker locally:
+
+```sh
+python3 scripts/check-release-docs.py --repo rustcommons/glibc-abilists
+```
+
+The local check has no network access. It verifies current manifest-version
+coverage, dated changelog entries, note sections and absolute release-body links.
+The [Release documentation workflow](https://github.com/rustcommons/glibc-abilists/blob/main/.github/workflows/release-docs.yml)
+runs that check on pushes/PRs. For this documentation remediation, use `[skip ci]`
+commits to avoid unrelated Rust matrices and explicitly dispatch this workflow
+on the candidate ref, recording its result before merge. Its manual
+`verify_published` input additionally checks all live note bodies and the latest
+version; release events check the corresponding body using current default-branch
+docs, because old tags predate the backfill. Structure checks do not establish
+historical correctness or runtime behavior.
 
 Software release qualification still follows the
 [collection guide](https://github.com/rustcommons/glibc-abilists/blob/main/docs/COLLECTING.md#validate-the-change)
@@ -66,8 +79,16 @@ registry archive, live GitHub Release notes, changelog, documentation and requir
 verification agree. A tag or successful crate upload alone is insufficient.
 After publishing notes, verify the live API's tag/name/body, non-draft status,
 source commit, latest designation, absence of new assets and all body links.
-Record the GitHub URL/publication timestamp and exact documentation commit in
-the requirements/release evidence. Keep old artifact/test outcomes identifiable.
+Run the published check after the authorized backfill:
+
+```sh
+python3 scripts/check-release-docs.py --repo rustcommons/glibc-abilists --published
+```
+
+It reads GitHub with an optional existing `GH_TOKEN`/`GITHUB_TOKEN`; no new
+credentials are required for public read access. Explicitly dispatch the workflow
+with `verify_published=true` as well. Record the GitHub URL/publication timestamp
+and exact documentation commit in the requirements/release evidence. Keep old artifact/test outcomes identifiable.
 
 As of the 2026-11-02 inventory, all three crates are available and non-yanked,
 but GitHub Release entries are absent. This PR prepares their backfill; it does

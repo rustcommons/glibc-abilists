@@ -16,7 +16,8 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
   guide was added after 0.1.2; it is not in that published archive.
 - Backfill this changelog and user-facing notes for existing 0.1.0, 0.1.1 and
   0.1.2 tags. Add release-documentation policy and traceability; GitHub Release
-  publication remains gated on approval. No new package version is involved.
+  publication remains gated on approval. Add a standard-library-only release-doc
+  checker and dedicated CI workflow. No new package version is involved.
 
 ## [0.1.2] - 2026-11-01
 
