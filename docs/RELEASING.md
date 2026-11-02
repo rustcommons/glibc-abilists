@@ -48,6 +48,26 @@ A documentation-history repair does not rerun old Rust tests or establish new
 runtime/platform qualification. Never regenerate ABI data to manufacture a
 documentation release.
 
+## ABI-data changes: downstream unwind-impact gate
+
+Any changed ABI-list dataset or newly collected glibc release must have a
+reviewed [ABI-data unwind-impact record](ABI-UNWIND-RELEASE-CHECKLIST.md) before
+release. Data-only changes are not exempt because downstream LLVM runtime
+linkage consumes the supplied libc ABI. Record symbol/version use, the retained
+Cargo 2.17 control, Aero consumer 2.22 floor and new-release linkage, exact
+downstream refs/hashes, fresh relevant producer/Cargo/shared/PyO3 results, native
+C `-fexceptions` pthread_exit/deferred-cancellation cleanup and valid bidirectional
+`C-unwind` roundtrips. Runtime direction remains pending user choice; no LLVM
+default is approved.
+Assess runtime closure separately from static unwinder selection; this is not a
+promise that libgcc can never load. Missing required evidence blocks release.
+
+For documentation-only changes with identical relevant payloads, the checklist
+permits narrowly justified reuse of named evidence. The release-doc structure
+workflow does not perform unwind qualification. Final runtime test-driver
+commands and cross-repository refs are pending integration in this proposal;
+it does not mark cargo-libc 0.4.0 tests green or authorize an ABI-data release.
+
 ## Backfill existing releases without replacing them
 
 For the 2026-11-02 backfill, preserve tags `v0.1.0`, `v0.1.1`, `v0.1.2`, their
