@@ -91,3 +91,27 @@ historical files. Current changelog/note/policy verification and the shared
 release-documentation workflow result belong in this remediation PR. Live
 GitHub Release URL/body/latest/asset checks remain pending authorized publication;
 none is represented as an original historical outcome.
+
+## Initial workflow registration evidence
+
+At candidate `af09555da7741d478d677139c5b53abd36e2c618` on 2026-11-02,
+`python3 scripts/check-release-docs.py --repo rustcommons/glibc-abilists` passed
+locally for three versions/current 0.1.2. Actionlint 1.7.12 validated the supplied
+workflow YAML/schema (`-shellcheck='' -pyflakes=''`); both shared files matched
+the coordinator copies byte-for-byte. Markdown rendering, paths/anchors and
+protected-file comparisons also passed. No fresh Rust suite was run.
+
+The explicit candidate dispatch command was:
+
+```sh
+gh workflow run release-docs.yml --repo rustcommons/glibc-abilists --ref docs/release-history-20261102 -f verify_published=false
+```
+
+It returned `HTTP 404: workflow release-docs.yml not found on the default branch`.
+This is the expected first-install registration constraint, not a candidate CI
+pass. The 2026-11-02 shared AGENTS v2 contract requires independent review of
+local checker/syntax evidence before an authorized normal merge registers the
+workflow. A green post-merge docs-workflow run is then mandatory before
+completing bootstrap or publishing any GitHub Release notes. Future routine
+merges require the registered check. Post-merge CI and live publication checks
+remain pending; no result is invented here.

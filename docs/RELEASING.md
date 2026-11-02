@@ -26,13 +26,20 @@ python3 scripts/check-release-docs.py --repo rustcommons/glibc-abilists
 The local check has no network access. It verifies current manifest-version
 coverage, dated changelog entries, note sections and absolute release-body links.
 The [Release documentation workflow](https://github.com/rustcommons/glibc-abilists/blob/main/.github/workflows/release-docs.yml)
-runs that check on pushes/PRs. For this documentation remediation, use `[skip ci]`
-commits to avoid unrelated Rust matrices and explicitly dispatch this workflow
-on the candidate ref, recording its result before merge. Its manual
-`verify_published` input additionally checks all live note bodies and the latest
-version; release events check the corresponding body using current default-branch
-docs, because old tags predate the backfill. Structure checks do not establish
-historical correctness or runtime behavior.
+runs that check on pushes/PRs. Routine merges require the registered CI check.
+For its first installation, GitHub cannot dispatch the workflow until it exists
+on the default branch. Independently review local checker and workflow syntax
+evidence, then authorize a normal bootstrap merge to register it. A green
+post-merge release-documentation workflow run is mandatory before bootstrap is
+complete or any GitHub Release notes are published; no candidate CI pass is
+claimed from the initial registration 404. For this remediation, use `[skip ci]`
+commits to avoid unrelated Rust matrices and explicitly dispatch the docs workflow
+after registration.
+
+Its manual `verify_published` input additionally checks all live note bodies and
+the latest version; release events check the corresponding body using current
+default-branch docs, because old tags predate the backfill. Structure checks do
+not establish historical correctness or runtime behavior.
 
 Software release qualification still follows the
 [collection guide](https://github.com/rustcommons/glibc-abilists/blob/main/docs/COLLECTING.md#validate-the-change)
