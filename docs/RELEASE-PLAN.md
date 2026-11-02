@@ -1,5 +1,17 @@
 # Release plan
 
+## Release-documentation completion — 2026-11-02
+
+The existing crate/tag/API-doc delivery evidence below remains valid. Under the
+new [release policy](RELEASING.md), completion also requires live GitHub Release
+notes. Entries for existing 0.1.0, 0.1.1 and 0.1.2 tags are being backfilled from
+[changelog](../CHANGELOG.md) and [historical evidence](RELEASE-HISTORY-20261102.md);
+GitHub publication is pending reviewer/coordinator GO. The first-install
+workflow bootstrap requires independent review of local checker/syntax evidence,
+a normal registration merge, then a mandatory green post-merge docs workflow
+before any notes are published. No candidate CI pass is claimed from the initial
+registration 404. No new package release or tag change is needed. This status does not rewrite the original validation.
+
 ## 0.1.2 released — 2026-11-01
 
 The coordinator published 0.1.2 from

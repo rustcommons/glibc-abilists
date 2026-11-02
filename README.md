@@ -42,6 +42,7 @@ println!("{} {} {:?}", release.tag, release.commit, release.signature);
 
 ## Guides
 
+- [Changelog](https://github.com/rustcommons/glibc-abilists/blob/main/CHANGELOG.md), [GitHub Releases](https://github.com/rustcommons/glibc-abilists/releases), and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/docs/RELEASING.md): version history and publication/completion rules.
 - [Requirements and evidence](https://github.com/rustcommons/glibc-abilists/blob/main/docs/REQUIREMENTS.md): confirmed scope, verification limits, and documentation map.
 - [Documentation convention](https://github.com/rustcommons/.github/blob/main/docs/DOCUMENTATION.md): shared documentation and traceability conventions.
 - [Consumer guide](https://github.com/rustcommons/glibc-abilists/blob/main/docs/USAGE.md): lookups, raw formats, verification, and redistribution.
