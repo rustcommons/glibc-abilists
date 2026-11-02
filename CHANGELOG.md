@@ -13,8 +13,10 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 - Propose a blocking ABI-data release checklist for downstream unwind impact:
   changed datasets/new glibc releases need exact refs/hashes, symbol-version and
-  floor comparisons, new-release linkage, fresh producer/Cargo/shared/PyO3
-  evidence and separate runtime-closure assessment. Final driver/ref integration
+  retained Cargo 2.17/Aero 2.22 comparisons, new-release linkage, fresh
+  producer/Cargo/shared/PyO3, native C cleanup and bidirectional `C-unwind`
+  evidence, and separate runtime-closure assessment. Runtime choice is pending;
+  no LLVM default is approved. Final driver/ref integration
   is pending; no cargo-libc 0.4.0 qualification or software/data release is claimed.
 - Add a collection/delivery diagram explaining online/offline checks, exception
   limits, compare versus rewrite, and the embedded-data API. This repository-only

@@ -1,11 +1,16 @@
 # ABI-data release: downstream unwind-impact checklist
 
 Status: draft policy adoption, 2026-11-02. No dataset/software release or runtime
-qualification is performed here. The approved direction for cargo-libc 0.4.0 is
-static LLVM unwinding for supported standalone executables, retaining dynamic
-glibc and `panic=unwind`. Shared libraries/Python keep their existing behavior.
-The implementation's final test driver and immutable refs have not been supplied
-to this proposal; no 0.4.0 test result is claimed.
+qualification is performed here. The runtime direction for cargo-libc 0.4.0 is
+pending user choice; no LLVM default is approved. Dynamic glibc and `panic=unwind`
+remain constraints, and shared libraries/Python keep their existing behavior.
+Final driver/immutable evidence refs remain pending; no 0.4.0 acceptance is claimed.
+
+Current native-probe findings reported during review: with both bfd and LLD,
+the LLVM helper replacement still crashes C cleanup even with the correct
+personality; the GCC baseline passes. These findings do not establish a working
+LLVM default or acceptance. Exact probe refs/logs must accompany final review;
+no native probes were run in this documentation change.
 
 ## Scope and authority
 
@@ -53,21 +58,21 @@ and its scope explicitly; a required case remains a blocker.
 | Downstream identities | Exact cargo-libc and linux-abi-tools producer source/package refs, relevant lock/resolution hashes, target, compiler/linker/toolchain versions, sysroot/provider identities and build configuration. |
 | LLVM runtime | Actual selected LLVM source/version/ref, archive/object names and hashes, build configuration and which selected objects enter the linked artifact. Do not infer selection from a dependency name alone. |
 | Symbol/version map | For libc symbols used by selected LLVM runtime objects, record supplied ABI availability/version(s), linked-artifact bindings and supplying component; compare base/candidate and the floor/new-release rows below. Distinguish available definitions from actual imports/bindings. |
-| Fresh tests and artifacts | Exact implementation-provided commands/job refs, input refs, environment/image hashes, run dates, exit/results, logs and produced artifact hashes for every applicable producer/Cargo/shared/PyO3 case. |
+| Fresh tests and artifacts | Exact implementation-provided commands/job refs, input refs, environment/image hashes, run dates, exit/results, logs and produced artifact hashes for every applicable producer/Cargo/shared/PyO3 case, native C cleanup and valid bidirectional `C-unwind` roundtrip; include bfd/LLD candidate and GCC-control outcomes. |
 | Runtime closure | Actual observed loaded dependencies and their refs/hashes, transitive/dynamically loaded components in tested scenarios, unwinder provider/selection evidence and differences from the baseline. Record observation limits separately from link inspection. |
 | Reuse or gaps | For scoped reuse, identify prior evidence, all relevant identical inputs, covered environments/cases and limits. For missing/failed evidence, state why it blocks the required claim and what remains to run. |
 
 ## Floor and new-release comparison
 
 Do not turn the dataset's earliest version into a new consumer support claim.
-The 2.17 row is the existing ABI-data baseline; the approved consumer floor is
-2.22. Each candidate record must include both comparisons and the new-release
-case when adding a release.
+glibc 2.17 is the retained existing Cargo control as well as the earliest ABI
+input; 2.22 is the Aero consumer floor, not a new global Cargo minimum. Each
+candidate record must retain both comparisons and the new-release case.
 
 | Input case | Required comparison/linkage evidence |
 | --- | --- |
-| glibc 2.17 data baseline | Map LLVM-runtime libc symbol/version requirements against the earliest supplied ABI and the prior dataset. Identify availability/binding differences; do not imply that every downstream configuration is supported on 2.17. |
-| glibc 2.22 consumer floor | Compare old/new supplied ABI and actual linked-artifact symbol versions against the consumer floor; retain fresh relevant link/run outcomes from the supported consumer driver. A raised requirement cannot silently pass as unchanged compatibility. |
+| glibc 2.17 retained Cargo control | Retain the existing Cargo control and compare base/candidate ABI availability, actual symbol/version bindings and relevant fresh link/run outcomes. Do not drop this control or raise the Cargo floor because Aero uses 2.22. |
+| glibc 2.22 Aero consumer floor | Compare old/new supplied ABI and actual linked-artifact symbol versions against Aero's floor, alongside the retained Cargo 2.17 control; retain fresh relevant link/run outcomes. A raised requirement cannot silently pass as unchanged compatibility. |
 | Newly collected glibc release | Map added/removed/changed supplied symbols and versions; retain fresh producer/consumer linkage results using that exact new-release input and applicable runtime outcomes. New-release success does not replace floor coverage. |
 
 A no-impact conclusion must cite the actual symbol map and fresh relevant
@@ -79,9 +84,18 @@ certifies runtime compatibility or distribution-patched glibc behavior.
 - [ ] Producer: exercise the implementation's ABI/provider-to-runtime preparation
   and link path against the candidate inputs; record selected runtime artifacts,
   symbol/version bindings, outputs and hashes. Capture relevant fresh tests.
-- [ ] Cargo supported standalone executables: record the approved static LLVM
-  unwinder selection with dynamic glibc and `panic=unwind`; run the final driver's
-  supported unwind/panic/cleanup regression cases at the floor/new-release inputs.
+- [ ] Cargo supported standalone executables: record the runtime choice only
+  after user decision, retaining dynamic glibc and `panic=unwind`; no LLVM default
+  is approved now. Run the final driver's supported unwind/panic/cleanup cases
+  with the retained Cargo 2.17 control, Aero 2.22 floor and new-release inputs.
+- [ ] Native C compiled with `-fexceptions`: require actual `pthread_exit` and
+  deferred-cancellation cleanup execution with bfd and LLD, comparing candidate
+  and GCC baseline behavior. Correct personality selection or Rust-only panic
+  tests do not replace these cases; the reported LLVM-helper C-cleanup crashes
+  remain unresolved, not passing qualification.
+- [ ] Require valid bidirectional `C-unwind` roundtrips across supported,
+  unwind-permitting ABI boundaries. Exercise both crossing directions; do not
+  count undefined or unwind-forbidden boundary behavior as a valid oracle.
 - [ ] Shared libraries and PyO3/Python: retain fresh applicable producer/Cargo
   regression results showing their existing linkage/unwind behavior is preserved.
   Do not apply the standalone-only policy to these outputs by assumption.
@@ -94,9 +108,9 @@ certifies runtime compatibility or distribution-patched glibc behavior.
   platform qualification.
 
 The command/job mapping is deliberately **pending**, not pseudocode executable
-instructions: parent-supplied final producer driver, Cargo driver, shared/PyO3
-cases and closure checks must be linked at their actual immutable implementation
-refs before merge. No command, option or API is invented here. A release-doc CI
+instructions: parent-supplied final producer driver, Cargo driver, native C
+cleanup and bidirectional `C-unwind` cases, shared/PyO3 cases and closure checks
+must be linked at their actual immutable implementation refs before merge. No command, option or API is invented here. A release-doc CI
 PASS checks documentation structure only and cannot satisfy these runtime gates.
 
 ## Documentation-only scoped reuse and existing limits

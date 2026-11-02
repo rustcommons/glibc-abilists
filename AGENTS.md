@@ -77,8 +77,8 @@ for packaging changes. Never publish to crates.io without the user's go-ahead.
 
 ## ABI-data releases and downstream unwinding
 
-- Before releasing a changed ABI-list dataset or adding a glibc release, complete the [ABI-data unwind-impact checklist](docs/ABI-UNWIND-RELEASE-CHECKLIST.md). Data-only changes are not exempt: record exact input/runtime/downstream refs and hashes, LLVM-runtime libc symbol/version use, glibc 2.17 data-baseline and consumer 2.22 floor comparisons, new-release linkage, and relevant fresh producer/Cargo tests including shared/PyO3 regressions.
-- Missing required evidence, unresolved driver/ref integration or unexplained floor/closure regressions block release. Documentation-only changes with identical relevant payloads may cite explicitly scoped prior evidence. Static LLVM unwinder selection for supported standalone executables is distinct from observed runtime closure; do not promise that libgcc can never load. Shared/Python behavior, legal, Tier 3 and offline-provenance limits are unchanged.
+- Before releasing a changed ABI-list dataset or adding a glibc release, complete the [ABI-data unwind-impact checklist](docs/ABI-UNWIND-RELEASE-CHECKLIST.md). Data-only changes are not exempt: record exact input/runtime/downstream refs and hashes, LLVM-runtime libc symbol/version use, retained Cargo glibc 2.17 control and Aero consumer 2.22 floor comparisons, new-release linkage, and relevant fresh producer/Cargo tests including shared/PyO3 regressions, native C `-fexceptions` pthread_exit/deferred-cancellation cleanup and valid bidirectional `C-unwind` roundtrips.
+- Missing required evidence, unresolved driver/ref integration or unexplained floor/closure regressions block release. Documentation-only changes with identical relevant payloads may cite explicitly scoped prior evidence. Runtime direction remains pending user choice; no LLVM default is approved. Any proposed static LLVM selection is distinct from observed runtime closure; do not promise that libgcc can never load. Shared/Python behavior, legal, Tier 3 and offline-provenance limits are unchanged.
 
 ## Git conventions
 

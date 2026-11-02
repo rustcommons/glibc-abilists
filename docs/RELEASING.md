@@ -53,9 +53,12 @@ documentation release.
 Any changed ABI-list dataset or newly collected glibc release must have a
 reviewed [ABI-data unwind-impact record](ABI-UNWIND-RELEASE-CHECKLIST.md) before
 release. Data-only changes are not exempt because downstream LLVM runtime
-linkage consumes the supplied libc ABI. Record symbol/version use, the 2.17
-data baseline, the consumer 2.22 floor and new-release linkage, exact downstream
-refs/hashes, fresh relevant producer/Cargo results and shared/PyO3 regressions.
+linkage consumes the supplied libc ABI. Record symbol/version use, the retained
+Cargo 2.17 control, Aero consumer 2.22 floor and new-release linkage, exact
+downstream refs/hashes, fresh relevant producer/Cargo/shared/PyO3 results, native
+C `-fexceptions` pthread_exit/deferred-cancellation cleanup and valid bidirectional
+`C-unwind` roundtrips. Runtime direction remains pending user choice; no LLVM
+default is approved.
 Assess runtime closure separately from static unwinder selection; this is not a
 promise that libgcc can never load. Missing required evidence blocks release.
 
