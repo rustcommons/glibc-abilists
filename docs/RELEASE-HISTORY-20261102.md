@@ -4,7 +4,8 @@ This is evidence for the backfilled root changelog and user-facing version
 notes, not new software qualification. Inventory base:
 `a2b630413bd17a4d9a729e91691ff1a4d46c2719`. Existing tags were fetched from
 GitHub; no tag was moved. `gh release list` returned no GitHub Release entries.
-Their documentation publication remains pending review/coordinator GO.
+At that initial inventory, documentation publication was pending review/coordinator
+GO. The completed backfill is recorded below; the inventory is historical.
 
 ## Original identities and registry availability
 
@@ -77,7 +78,7 @@ Original local release logs beyond retained CI are not established here.
 The [0.1.2 detailed record](RELEASE-0.1.2.md) remains unchanged evidence for its
 separately recorded local/package/docs.rs validation.
 
-## Editorial reference and remaining completion gap
+## Editorial reference and initial completion gap
 
 [Aero1553's changelog](https://github.com/joey-huckabee/aero1553/blob/main/CHANGELOG.md)
 and [v5.8.0 notes](https://github.com/joey-huckabee/aero1553/releases/tag/v5.8.0)
@@ -88,9 +89,10 @@ adopted by this library's notes.
 Backfilled files did not exist at the historical tags. They use absolute `main`
 documentation links so future GitHub Release bodies do not point into missing
 historical files. Current changelog/note/policy verification and the shared
-release-documentation workflow result belong in this remediation PR. Live
-GitHub Release URL/body/latest/asset checks remain pending authorized publication;
-none is represented as an original historical outcome.
+release-documentation workflow result belonged in the remediation PR. At that
+pre-publication stage, live GitHub Release URL/body/latest/asset checks were
+pending authorized publication; none was an original historical outcome.
+Completion evidence follows without changing the initial observation.
 
 ## Initial workflow registration evidence
 
@@ -113,5 +115,45 @@ pass. The 2026-11-02 shared AGENTS v2 contract requires independent review of
 local checker/syntax evidence before an authorized normal merge registers the
 workflow. A green post-merge docs-workflow run is then mandatory before
 completing bootstrap or publishing any GitHub Release notes. Future routine
-merges require the registered check. Post-merge CI and live publication checks
-remain pending; no result is invented here.
+merges require the registered check. At this preparatory stage, post-merge CI and
+live publication checks were pending; their completed outcomes follow.
+
+## Completed backfill and verification
+
+On 2026-11-02, normal bootstrap merge
+`5c180bd6985f8e9ee9fff54f3291ffe8f8a58da0` preserved reviewed head
+`383cede574cd126487d13b446d72e968dd48acb6` with an identical tree.
+[Bootstrap docs run 41387759314](https://github.com/rustcommons/glibc-abilists/actions/runs/41387759314)
+succeeded before publication. The unrelated automatically triggered Rust run
+was cancelled; no new Rust qualification is claimed for this backfill.
+
+Releases were created in ascending order using the committed note files,
+`--notes-file` and `--verify-tag`; older releases used `--latest=false`, and
+0.1.2 used `--latest`. Original source tags and registry artifacts did not change.
+
+| GitHub Release | Actual backfill publication time (UTC) | Verified live state |
+| --- | --- | --- |
+| [v0.1.0](https://github.com/rustcommons/glibc-abilists/releases/tag/v0.1.0) | 2026-11-02T04:19:23Z | Exact committed body, unchanged source tag, published/non-draft/non-prerelease, zero assets. |
+| [v0.1.1](https://github.com/rustcommons/glibc-abilists/releases/tag/v0.1.1) | 2026-11-02T04:19:24Z | Exact committed body, unchanged source tag, published/non-draft/non-prerelease, zero assets. |
+| [v0.1.2](https://github.com/rustcommons/glibc-abilists/releases/tag/v0.1.2) | 2026-11-02T04:19:25Z | Exact committed body, unchanged source tag, published/non-draft/non-prerelease, zero assets; latest. |
+
+The first unauthenticated full `--published` check failed with
+`Missing published GitHub Release: v0.1.2` after all three creations succeeded.
+Authenticated API reads showed all three Releases. The initial failure remains
+a transient API-visibility observation; stale public data is plausible but its
+precise cause was not established. No Release or tag was edited or recreated.
+
+A retry with existing authentication supplied only through the child process
+environment passed `python3 scripts/check-release-docs.py --repo rustcommons/glibc-abilists --published`
+for all three versions/current 0.1.2; no token was printed or persisted.
+[Full-history workflow 41387980296](https://github.com/rustcommons/glibc-abilists/actions/runs/41387980296),
+explicitly dispatched with `verify_published=true`, succeeded on the same merge
+commit, including all published-body/latest checks. Final read-only API checks
+confirmed exact bodies, unchanged tag commits, latest 0.1.2 and zero assets;
+local/remote main were clean at the merge commit.
+
+No release-event workflow runs were recorded during inspection. The explicit
+full-history workflow supplies the verification gate for these three Releases;
+it does not claim historical-tag release-event triggering was exercised. Future
+routine merges still require registered release-doc CI. These outcomes concern
+release documentation, not new runtime compatibility or old test outcomes.
