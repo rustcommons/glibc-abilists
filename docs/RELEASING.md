@@ -106,3 +106,26 @@ published-verification workflows passed after merge
 The initial registration 404 and transient unauthenticated API failure remain
 historical observations. Existing 0.1.2 artifact records remain unchanged; this
 evidence additionally covers GitHub Release documentation completion.
+
+## Trusted Publishing baseline
+
+The [publish workflow](https://github.com/rustcommons/glibc-abilists/blob/main/.github/workflows/publish.yml)
+adds an owner-reviewed alternative for future authorized releases; it does not
+retire the existing manual process above. Configure this exact Trusted Publisher
+on crates.io for `glibc-abilists`: repository owner `rustcommons`, repository
+`glibc-abilists`, workflow filename `publish.yml`, environment `crates-io`.
+The collector is unpublished and needs no Trusted Publisher.
+
+A new `v*` tag triggers the environment approval. The workflow requires the tag
+version to match Cargo.toml and its commit to belong to main history, checks
+release documentation and workspace tests, packages the library, obtains a
+short-lived OIDC token, runs `cargo publish --locked -p glibc-abilists`, and
+compares the official archive and crates.io SHA-256 with the local package.
+The [verification script](https://github.com/rustcommons/glibc-abilists/blob/main/scripts/verify-crate-checksum.py)
+can also audit an existing version without credentials or publication.
+Tag/registry/release-note approval and the existing provenance/legal gates still
+apply. Never replay an existing tag to republish a version. No workflow has
+published a package as part of the 2026-11-15 security baseline installation.
+Scorecard reporting first runs after merge or on its weekly schedule; a configured
+badge is not evidence of a particular score. Binary SBOM/SLSA workflows do not
+apply: this repository distributes a Rust library crate, not release binaries.
