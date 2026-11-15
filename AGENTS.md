@@ -81,7 +81,7 @@ for packaging changes. Never publish to crates.io without the user's go-ahead.
 - Pin every external GitHub Action to a full commit SHA with its version tag in a trailing comment. Keep workflow permissions read-only and grant write permissions only to the job that needs them; disable persisted checkout credentials.
 - Require the `lf-only`, release-documentation, zizmor and cargo-deny checks before merge, alongside applicable existing validation. Review findings rather than weakening the gates; document narrowly justified exceptions inline. Keep Dependabot's weekly Cargo/action updates enabled.
 - Keep Scorecard reporting and SARIF upload scoped to its reporting job. Do not claim a score or SLSA level from configuration alone.
-- The tag-triggered publishing workflow requires the owner-reviewed `crates-io` environment and matching crates.io Trusted Publisher configuration. Its installation does not authorize a release. Preserve the existing manual release process until explicitly retired; never publish the collector.
+- The tag-triggered [Trusted Publishing workflow](.github/workflows/trusted-publishing.yml) must keep the canonical filename `trusted-publishing.yml` and requires the owner-reviewed `crates-io` environment and matching crates.io Trusted Publisher configuration. Its installation does not authorize a release. Preserve the existing manual release process until explicitly retired; never publish the collector.
 
 ## Git conventions
 
