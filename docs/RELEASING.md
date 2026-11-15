@@ -109,11 +109,11 @@ evidence additionally covers GitHub Release documentation completion.
 
 ## Trusted Publishing baseline
 
-The [publish workflow](https://github.com/rustcommons/glibc-abilists/blob/main/.github/workflows/publish.yml)
+The [publish workflow](https://github.com/rustcommons/glibc-abilists/blob/main/.github/workflows/trusted-publishing.yml)
 adds an owner-reviewed alternative for future authorized releases; it does not
 retire the existing manual process above. Configure this exact Trusted Publisher
 on crates.io for `glibc-abilists`: repository owner `rustcommons`, repository
-`glibc-abilists`, workflow filename `publish.yml`, environment `crates-io`.
+`glibc-abilists`, workflow filename `trusted-publishing.yml`, environment `crates-io`.
 The collector is unpublished and needs no Trusted Publisher.
 
 A new `v*` tag triggers the environment approval. The workflow requires the tag
