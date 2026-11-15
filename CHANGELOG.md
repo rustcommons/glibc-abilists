@@ -11,10 +11,14 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 ### Repository security
 
-- Add weekly grouped dependency/action updates, pinned workflow actions, zizmor
+- Add monthly grouped dependency/action updates (two open version PRs per ecosystem), pinned workflow actions, zizmor
   and cargo-deny gates, Scorecard reporting and an owner-reviewed Trusted Publishing
   workflow with archive checksum verification. Installation does not publish a
   version or change ABI data; the existing release process remains available.
+- Cancel superseded PR checks and keep Dependabot PRs on core checks with one
+  Linux Rust job; normal PRs, main and scheduled runs retain qualification.
+  Dependabot security updates remain immediate, independent of the monthly
+  version-update schedule.
 
 ### Documentation
 
