@@ -9,6 +9,13 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 ## [Unreleased]
 
+### Repository security
+
+- Add weekly grouped dependency/action updates, pinned workflow actions, zizmor
+  and cargo-deny gates, Scorecard reporting and an owner-reviewed Trusted Publishing
+  workflow with archive checksum verification. Installation does not publish a
+  version or change ABI data; the existing release process remains available.
+
 ### Documentation
 
 - Add a collection/delivery diagram explaining online/offline checks, exception

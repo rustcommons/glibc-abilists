@@ -5,6 +5,7 @@
 [![CI](https://github.com/rustcommons/glibc-abilists/actions/workflows/ci.yml/badge.svg)](https://github.com/rustcommons/glibc-abilists/actions/workflows/ci.yml)
 ![Rust 1.90+](https://img.shields.io/badge/Rust-1.90%2B-orange)
 ![Data: LGPL-2.1-or-later](https://img.shields.io/badge/data-LGPL--2.1--or--later-blue)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/rustcommons/glibc-abilists/badge)](https://scorecard.dev/viewer/?uri=github.com/rustcommons/glibc-abilists)
 [![crates.io](https://img.shields.io/crates/v/glibc-abilists)](https://crates.io/crates/glibc-abilists)
 [![docs.rs](https://img.shields.io/docsrs/glibc-abilists)](https://docs.rs/glibc-abilists)
 

@@ -75,6 +75,14 @@ for packaging changes. Never publish to crates.io without the user's go-ahead.
 - When backfilling history, reconstruct facts from existing tags, registry records and source/evidence. Preserve original source identities, distinguish original release dates from documentation backfill dates, and state unavailable historical validation. Never fabricate checks, move tags, republish versions, or imply that repository edits change immutable published archives.
 - For an organization profile, placeholder or project with no shipped version, record release verification as not applicable until its first authorized release. Do not invent versions, features, changelog history or GitHub Releases to satisfy this convention.
 
+## Security gates and publishing
+
+- All changes to `main` go through reviewed PRs; never push directly to `main` or bypass required checks. Preserve protected release tags.
+- Pin every external GitHub Action to a full commit SHA with its version tag in a trailing comment. Keep workflow permissions read-only and grant write permissions only to the job that needs them; disable persisted checkout credentials.
+- Require the `lf-only`, release-documentation, zizmor and cargo-deny checks before merge, alongside applicable existing validation. Review findings rather than weakening the gates; document narrowly justified exceptions inline. Keep Dependabot's weekly Cargo/action updates enabled.
+- Keep Scorecard reporting and SARIF upload scoped to its reporting job. Do not claim a score or SLSA level from configuration alone.
+- The tag-triggered publishing workflow requires the owner-reviewed `crates-io` environment and matching crates.io Trusted Publisher configuration. Its installation does not authorize a release. Preserve the existing manual release process until explicitly retired; never publish the collector.
+
 ## Git conventions
 
 **No tool attribution, anywhere.** Do not add `Co-Authored-By: Claude ...` trailers,
