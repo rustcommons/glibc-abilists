@@ -1,17 +1,23 @@
 name: CI
 on:
   push:
+    branches: [main]
   pull_request:
   schedule:
     # Weekly: detect upstream tag or mirror changes affecting published data.
     - cron: "17 5 * * 1"
+# Superseded PR revisions cancel; non-PR runs retain independent qualification.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
   rust:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        # Dependabot keeps one Linux fmt/test/clippy job; normal PRs keep both OSes.
+        os: ${{ fromJSON(github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]' && '["ubuntu-latest"]' || '["ubuntu-latest", "windows-latest"]') }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -25,6 +31,7 @@ jobs:
       - run: cargo test --workspace --locked --offline
       - run: cargo clippy --workspace --all-targets --locked --offline -- -D warnings
   docs:
+    if: github.event_name != 'pull_request' || github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -38,6 +45,7 @@ jobs:
         env:
           RUSTDOCFLAGS: -D warnings
   msrv:
+    if: github.event_name != 'pull_request' || github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -48,6 +56,7 @@ jobs:
           toolchain: 1.90.0
       - run: cargo test --workspace --locked --offline
   package:
+    if: github.event_name != 'pull_request' || github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -59,6 +68,7 @@ jobs:
       - run: cargo package --locked
       - run: cargo package --list --locked | grep -v '^data/' ; cargo package --list --locked | grep -c '^data/'
   upstream:
+    if: github.event_name != 'pull_request' || github.event.pull_request.user.login != 'dependabot[bot]'
     name: Data matches glibc's signed tags
     runs-on: ubuntu-latest
     steps:
