@@ -11,10 +11,17 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 ### Repository security
 
+- Add isolated library-input and hash-padding fuzz targets, seeded corpora and
+  digest-pinned ClusterFuzzLite builds with PR/batch fuzzing and crash SARIF.
+  The library still does not parse ABI text or load runtime tables.
+- Pin zizmor wheels by hash and cargo-deny installs by exact locked version;
+  retire CI-skip message guidance so CI and managed CodeQL remain enabled.
+
 - Add monthly grouped dependency/action updates (two open version PRs per ecosystem), pinned workflow actions, zizmor
   and cargo-deny gates, Scorecard reporting and an owner-reviewed Trusted Publishing
   workflow with archive checksum verification. Installation does not publish a
-  version or change ABI data; the existing release process remains available.
+  version or change ABI data; future crate publication uses the owner-approved
+  Trusted Publishing environment exclusively after owner-machine token revocation.
 - Cancel superseded PR checks and keep Dependabot PRs on core checks with one
   Linux Rust job; normal PRs, main and scheduled runs retain qualification.
   Dependabot security updates remain immediate, independent of the monthly

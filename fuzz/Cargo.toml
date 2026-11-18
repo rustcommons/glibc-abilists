@@ -1,0 +1,31 @@
+[package]
+name = "glibc-abilists-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+license = "MIT"
+
+[package.metadata]
+cargo-fuzz = true
+
+# An independent workspace: no fuzz dependencies enter the shipped library graph.
+[workspace]
+members = ["."]
+
+[dependencies]
+libfuzzer-sys = "=0.4.13"
+glibc-abilists = { path = ".." }
+
+[[bin]]
+name = "library_inputs"
+path = "fuzz_targets/library_inputs.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "hash_padding"
+path = "fuzz_targets/hash_padding.rs"
+test = false
+doc = false
+bench = false

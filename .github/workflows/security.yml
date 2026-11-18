@@ -19,22 +19,24 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          version: 1.32.0
-          advanced-security: false
+          python-version: '3.11.18'
+      - run: python -m pip install --require-hashes -r .github/requirements-security.txt
+      - run: zizmor --offline .
   cargo-deny:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # v1
-        with:
-          toolchain: 1.90.0
-      - uses: taiki-e/install-action@ab49d3c64680143e184118bed66a46419fc15519 # v2.90.5
-        with:
-          tool: cargo-deny@0.20.2
-          fallback: none
+      - name: Install pinned Rust toolchain using runner-provided rustup
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup set auto-self-update disable
+          rustup toolchain install 1.90.0 --profile minimal
+          rustup default 1.90.0
+      - run: cargo install cargo-deny --locked --version 0.20.2 --jobs 2
       # Promote unmaintained advisory warnings to errors; duplicate versions warn.
       - run: cargo deny --workspace --locked check --deny unmaintained

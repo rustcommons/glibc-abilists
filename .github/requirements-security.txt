@@ -1,0 +1,4 @@
+# Standalone zizmor wheels, x86_64 GitHub runner and aarch64 local validation.
+zizmor==1.32.0 \
+    --hash=sha256:84a6acb975accc13408786a2bd274b572537ca19c933ebbc13e78f3988562071 \
+    --hash=sha256:0cdd38fca6eb34ceb567548548d706332e3535ea66894b9168c048e03207b68c
