@@ -7,7 +7,7 @@ SPDX-FileCopyrightText = "Free Software Foundation, Inc. and the GNU C Library c
 SPDX-License-Identifier = "LGPL-2.1-or-later"
 
 [[annotations]]
-path = ["collector/**", "upstream.toml", ".github/**", "CLAUDE.md", "AGENTS.md", "docs/**", ".gitattributes", ".gitignore", "Cargo.lock", "REUSE.toml"]
+path = ["fuzz/**", ".clusterfuzzlite/**", "collector/**", "upstream.toml", ".github/**", "CLAUDE.md", "AGENTS.md", "docs/**", ".gitattributes", ".gitignore", "Cargo.lock", "REUSE.toml"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "rustcommons contributors"
 SPDX-License-Identifier = "MIT"
@@ -17,3 +17,9 @@ path = ["keys/**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "The respective key holders listed in keys/keys.tsv"
 SPDX-License-Identifier = "LicenseRef-public-key"
+
+[[annotations]]
+path = ["fuzz/corpus/hash_padding/glibc-*.abilist"]
+precedence = "override"
+SPDX-FileCopyrightText = "Free Software Foundation, Inc. and the GNU C Library contributors"
+SPDX-License-Identifier = "LGPL-2.1-or-later"

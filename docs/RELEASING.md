@@ -32,9 +32,9 @@ on the default branch. Independently review local checker and workflow syntax
 evidence, then authorize a normal bootstrap merge to register it. A green
 post-merge release-documentation workflow run is mandatory before bootstrap is
 complete or any GitHub Release notes are published; no candidate CI pass is
-claimed from the initial registration 404. For this remediation, use `[skip ci]`
-commits to avoid unrelated Rust matrices and explicitly dispatch the docs workflow
-after registration.
+claimed from the initial registration 404. Never suppress CI or CodeQL through
+commit or merge messages. Use scoped workflow conditions for bounded validation;
+explicitly dispatch release-documentation verification when required.
 
 Its manual `verify_published` input additionally checks all live note bodies and
 the latest version; release events check the corresponding body using current
@@ -110,8 +110,10 @@ evidence additionally covers GitHub Release documentation completion.
 ## Trusted Publishing baseline
 
 The [publish workflow](https://github.com/rustcommons/glibc-abilists/blob/main/.github/workflows/trusted-publishing.yml)
-adds an owner-reviewed alternative for future authorized releases; it does not
-retire the existing manual process above. Configure this exact Trusted Publisher
+is the sole crate-publication route for future authorized releases, with owner
+approval of the `crates-io` environment. The owner-machine crates.io token was
+revoked on 2026-11-16; that publication route is retired. GitHub Release notes
+still follow the approval/completion rules above. Configure this exact Trusted Publisher
 on crates.io for `glibc-abilists`: repository owner `rustcommons`, repository
 `glibc-abilists`, workflow filename `trusted-publishing.yml`, environment `crates-io`.
 The collector is unpublished and needs no Trusted Publisher.
@@ -126,6 +128,6 @@ can also audit an existing version without credentials or publication.
 Tag/registry/release-note approval and the existing provenance/legal gates still
 apply. Never replay an existing tag to republish a version. No workflow has
 published a package as part of the 2026-11-15 security baseline installation.
-Scorecard reporting first runs after merge or on its weekly schedule; a configured
+Scorecard reporting runs on main pushes and its weekly schedule; a configured
 badge is not evidence of a particular score. Binary SBOM/SLSA workflows do not
 apply: this repository distributes a Rust library crate, not release binaries.
