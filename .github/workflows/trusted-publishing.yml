@@ -198,6 +198,7 @@ jobs:
           path: ${{ runner.temp }}/dist
       - name: Re-check SHA256SUMS
         run: cd "$RUNNER_TEMP/dist" && sha256sum -c SHA256SUMS
+      # Crate/dependency compilation and verification builds finish in Build.
       - name: Prepare unpublished release crates without registry credentials
         id: prepare
         run: |
@@ -215,7 +216,7 @@ jobs:
               echo "::error::Cannot determine publication status for $crate $VERSION (HTTP $status)."
               exit 1
             fi
-            cargo package --locked -p "$crate"
+            cargo package --locked --no-verify -p "$crate"
             cmp "target/package/$crate-$VERSION.crate" "$RUNNER_TEMP/dist/$crate-$VERSION.crate"
             pending=$(jq -c --arg crate "$crate" '. + [$crate]' <<<"$pending")
           done
