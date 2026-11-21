@@ -83,6 +83,8 @@ for packaging changes. Never publish to crates.io without the user's go-ahead.
 - Keep Scorecard reporting and SARIF upload scoped to its reporting job. Do not claim a score or SLSA level from configuration alone.
 - The tag-triggered [Trusted Publishing workflow](.github/workflows/trusted-publishing.yml) must keep the canonical filename `trusted-publishing.yml` and requires the owner-reviewed `crates-io` environment and matching crates.io Trusted Publisher configuration. Its installation does not authorize a release. Following the owner-machine token revocation on 2026-11-16, all future crate publication must use this workflow and owner approval of the `crates-io` environment; the owner-machine route is retired. Never publish the collector.
 
+- Use explicit runner images (`ubuntu-24.04`, `windows-2025`) in maintained workflows. Moving to Ubuntu 26.04 is a deliberate reviewed change, not an automatic label migration. Log `rustc --version` in Rust jobs. Changes to the release workflow require its credential-free PR dry-run to pass; tag publication still requires owner approval.
+
 ## Fuzzing, SAST and installation pins
 
 - Never use CI-skip markers in commit or merge messages: CodeQL and CI must run. Keep the coordinator-managed CodeQL default setup enabled.
