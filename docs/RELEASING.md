@@ -79,7 +79,10 @@ Runners are Ubuntu 24.04; moving to Ubuntu 26.04 requires a reviewed change.
 Only newer runs of the same PR cancel one another; tag runs are never cancelled.
 Tools use exact versions/lock enforcement and actions use reviewed full SHAs.
 The 2026-11-21 adoption follows reviewed cargo-libc PR #43, reusing its gate script
-unchanged and adapting only library-specific qualification/verification.
+with the shared PR #44 CI-query correction and adapting only library-specific
+qualification/verification. The gate reads up to 100 runs for the exact commit
+and requires a successful conclusion; it does not use the unreliable success-status
+query filter.
 
 ## Authorized assets and registration
 

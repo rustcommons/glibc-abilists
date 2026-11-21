@@ -42,7 +42,8 @@ collection, or publication policy is changed by this item.
 
 The owner-approved [org pipeline](https://github.com/rustcommons/.github/blob/main/docs/TRUSTED-PUBLISHING.md)
 is implemented in `trusted-publishing.yml`, adapted from reviewed cargo-libc
-PR #43. Its generic `scripts/release-gate.py` is reused unchanged. This repository
+PR #43, including the shared CI-query fix from PR #44. The gate checks returned
+run conclusions without GitHub's unreliable success-status filter. This repository
 releases only `glibc-abilists`; the collector and fuzz workspace remain unpublished.
 Existing release documentation, workspace checks and the credential-free packaging
 dry-run are folded into Build. The authorized GitHub assets are the crate,
