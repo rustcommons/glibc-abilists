@@ -37,3 +37,28 @@ See the [next-release plan](RELEASE-PLAN.md) for scope, dependency order, and re
 This is collector hardening/documentation follow-up, not a confirmed library
 runtime defect or a finding that the shipped data is compromised. No exception,
 collection, or publication policy is changed by this item.
+
+## Standard release pipeline adoption — 2026-11-21
+
+The owner-approved [org pipeline](https://github.com/rustcommons/.github/blob/main/docs/TRUSTED-PUBLISHING.md)
+is implemented in `trusted-publishing.yml`, adapted from reviewed cargo-libc
+PR #43. Its generic `scripts/release-gate.py` is reused unchanged. This repository
+releases only `glibc-abilists`; the collector and fuzz workspace remain unpublished.
+Existing release documentation, workspace checks and the credential-free packaging
+dry-run are folded into Build. The authorized GitHub assets are the crate,
+CycloneDX SBOM, `SHA256SUMS` and `<repo>-<version>.crates.intoto.jsonl`; see the
+[release policy](RELEASING.md). No version, tag or release is created by adoption.
+
+- [ ] Complete adoption review after the PR's Release gate and Build dry run are
+  green with `publish=false`; retain the exact candidate and run evidence.
+- [ ] At the next separately authorized release, exercise attestation, owner
+  environment approval, crates.io publication, automatic GitHub Release creation
+  and live verification. These are not proven by a dry run or by the historical
+  0.1.2 release. Do not replay old tags or attach new assets to old releases.
+- [ ] Record the docs.rs build result after that release; bounded waiting can
+  report pending, which is not success and remains follow-up work.
+
+Binary workflow consolidation (org phase 2) and clean executable installation
+checks are not applicable here: this repository ships a data library, with no
+binary release workflow. The existing architecture/libc and offline-provenance
+roadmap above is preserved; adoption does not resolve those product decisions.

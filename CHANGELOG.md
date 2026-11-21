@@ -9,6 +9,14 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 ## [Unreleased]
 
+### Repository
+
+- Adopt the standard Trusted Publishing pipeline with release gate, Build,
+  attestations, owner-approved crates.io publication, automatic GitHub Release
+  creation and verification. Use dated changelog entries as the source of
+  release notes and attach only the authorized crate/SBOM/checksum/provenance
+  files. The collector remains unpublished; adoption performs no release.
+
 ### Collector
 
 - Replace the archived GitHub cross-check endpoint with upstream's maintained
