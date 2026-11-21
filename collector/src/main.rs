@@ -284,12 +284,72 @@ fn check_remote(
     local: &BTreeMap<String, String>,
     required: bool,
 ) -> Result<(), String> {
-    let text = String::from_utf8(git_output(
-        None,
-        &["ls-remote", url, "refs/tags/glibc-*"],
-        &[],
-    )?)
-    .map_err(|e| e.to_string())?;
+    check_remote_with(
+        url,
+        tags,
+        local,
+        required,
+        || git_output(None, &["ls-remote", url, "refs/tags/glibc-*"], &[]),
+        std::thread::sleep,
+    )
+}
+
+// Git's HTTP/transport diagnostics, not the advertised refs, decide retries.
+// 403 can be either rate limiting or permanent denial; retries are bounded and
+// exhaustion fails closed in both cases. Certificate/authentication errors and
+// unknown failures are not assumed transient.
+fn transient_remote_error(error: &str) -> bool {
+    let error = error.to_ascii_lowercase();
+    [408, 429, 500, 502, 503, 504, 403]
+        .iter()
+        .any(|status| error.contains(&format!("returned error: {status}")))
+        || [
+            "could not resolve host",
+            "could not resolve proxy",
+            "failed to connect",
+            "connection reset",
+            "connection was reset",
+            "connection timed out",
+            "operation timed out",
+            "tls connection was non-properly terminated",
+            "http/2 stream",
+            "remote end hung up unexpectedly",
+            "empty reply from server",
+        ]
+        .iter()
+        .any(|message| error.contains(message))
+}
+
+fn check_remote_with(
+    url: &str,
+    tags: &[(String, String)],
+    local: &BTreeMap<String, String>,
+    required: bool,
+    mut fetch: impl FnMut() -> Result<Vec<u8>, String>,
+    mut wait: impl FnMut(std::time::Duration),
+) -> Result<(), String> {
+    let mut attempt = 1;
+    let bytes = loop {
+        match fetch() {
+            Ok(bytes) => break bytes,
+            Err(error) if attempt < 3 && transient_remote_error(&error) => {
+                let delay = std::time::Duration::from_secs(1 << attempt);
+                eprintln!(
+                    "source unavailable: {url} (attempt {attempt}/3): {error}; retry in {}s",
+                    delay.as_secs()
+                );
+                wait(delay);
+                attempt += 1;
+            }
+            Err(error) => {
+                return Err(format!(
+                    "source unavailable: {url} after {attempt} attempt(s): {error}"
+                ));
+            }
+        }
+    };
+    let text = String::from_utf8(bytes)
+        .map_err(|error| format!("invalid source response: {url}: {error}"))?;
     let remote: BTreeMap<&str, &str> = text
         .lines()
         .filter_map(|l| l.split_once('\t'))
@@ -302,11 +362,11 @@ fn check_remote(
             Some(o) if *o == local[tag] => agreed += 1,
             Some(o) => {
                 return Err(format!(
-                    "{url}: {tag} is {o}, but the local clone has {}",
+                    "tag mismatch: {url}: {tag} is {o}, but the local clone has {}",
                     local[tag]
                 ))
             }
-            None if required => return Err(format!("{url}: {tag} is missing")),
+            None if required => return Err(format!("required tag missing: {url}: {tag}")),
             None => absent += 1,
         }
     }
@@ -881,6 +941,7 @@ mod tests {
     fn parses_upstream_toml() {
         let c = Config::parse(include_str!("../../upstream.toml")).unwrap();
         assert_eq!(c.repository, "https://sourceware.org/git/glibc.git");
+        assert_eq!(c.mirrors, ["https://gitlab.com/gnutools/glibc.git"]);
         assert_eq!(c.directories.len(), 3);
         let v = c.versions().unwrap();
         assert_eq!(v.first().map(String::as_str), Some("2.17"));
@@ -911,5 +972,175 @@ mod tests {
         assert!(Config::parse(&format!("{base}extra = \"x\"\n")).is_err());
         let backwards = base.replace("2.18", "2.16");
         assert!(Config::parse(&backwards).unwrap().versions().is_err());
+    }
+
+    type RemoteFixture = (Vec<(String, String)>, BTreeMap<String, String>, Vec<u8>);
+
+    fn remote_fixture() -> RemoteFixture {
+        let tags = vec![("glibc-2.17".into(), "2.17".into())];
+        let local = BTreeMap::from([("glibc-2.17".into(), "a".repeat(40))]);
+        let reply = format!("{}\trefs/tags/glibc-2.17\n", "a".repeat(40)).into_bytes();
+        (tags, local, reply)
+    }
+
+    #[test]
+    fn transient_remote_failure_recovers_with_bounded_backoff() {
+        let (tags, local, reply) = remote_fixture();
+        let mut calls = 0;
+        let mut waits = Vec::new();
+        check_remote_with(
+            "test-source",
+            &tags,
+            &local,
+            false,
+            || {
+                calls += 1;
+                if calls < 3 {
+                    Err("fatal: The requested URL returned error: 403".into())
+                } else {
+                    Ok(reply.clone())
+                }
+            },
+            |delay| waits.push(delay.as_secs()),
+        )
+        .unwrap();
+        assert_eq!(calls, 3);
+        assert_eq!(waits, [2, 4]);
+    }
+
+    #[test]
+    fn unavailable_primary_and_mirror_both_fail_after_retries() {
+        let (tags, local, _) = remote_fixture();
+        for required in [true, false] {
+            let mut calls = 0;
+            let mut waits = Vec::new();
+            let error = check_remote_with(
+                "test-source",
+                &tags,
+                &local,
+                required,
+                || {
+                    calls += 1;
+                    Err("The requested URL returned error: 503".into())
+                },
+                |delay| waits.push(delay.as_secs()),
+            )
+            .unwrap_err();
+            assert!(error.starts_with("source unavailable: test-source after 3"));
+            assert_eq!(calls, 3);
+            assert_eq!(waits, [2, 4]);
+        }
+    }
+
+    #[test]
+    fn permanent_remote_error_fails_without_retry() {
+        let (tags, local, _) = remote_fixture();
+        for message in [
+            "The requested URL returned error: 404",
+            "Authentication failed",
+            "SSL certificate problem: certificate has expired",
+            "cannot run git: not found",
+        ] {
+            assert!(!transient_remote_error(message));
+            let mut calls = 0;
+            let error = check_remote_with(
+                "test-source",
+                &tags,
+                &local,
+                false,
+                || {
+                    calls += 1;
+                    Err(message.into())
+                },
+                |_| panic!("permanent error must not sleep"),
+            )
+            .unwrap_err();
+            assert!(error.starts_with("source unavailable:"));
+            assert_eq!(calls, 1);
+        }
+    }
+
+    #[test]
+    fn returned_tag_mismatch_is_never_retried_or_skipped() {
+        let (tags, local, _) = remote_fixture();
+        for required in [true, false] {
+            for fail_first in [false, true] {
+                let mut calls = 0;
+                let mut waits = Vec::new();
+                let error = check_remote_with(
+                    "test-source",
+                    &tags,
+                    &local,
+                    required,
+                    || {
+                        calls += 1;
+                        if fail_first && calls == 1 {
+                            Err("Connection reset by peer".into())
+                        } else {
+                            Ok(format!("{}\trefs/tags/glibc-2.17\n", "b".repeat(40)).into_bytes())
+                        }
+                    },
+                    |delay| waits.push(delay.as_secs()),
+                )
+                .unwrap_err();
+                assert!(error.starts_with("tag mismatch:"));
+                assert_eq!(calls, if fail_first { 2 } else { 1 });
+                assert_eq!(waits.len(), usize::from(fail_first));
+            }
+        }
+    }
+
+    #[test]
+    fn missing_tag_policy_and_annotated_object_comparison_are_preserved() {
+        let (tags, local, mut reply) = remote_fixture();
+        let error = check_remote_with(
+            "test-source",
+            &tags,
+            &local,
+            true,
+            || Ok(Vec::new()),
+            |_| panic!("missing primary tag must not sleep"),
+        )
+        .unwrap_err();
+        assert!(error.starts_with("required tag missing:"));
+        check_remote_with(
+            "test-source",
+            &tags,
+            &local,
+            false,
+            || Ok(Vec::new()),
+            |_| panic!("mirror lag must not sleep"),
+        )
+        .unwrap();
+        reply.extend(format!("{}\trefs/tags/glibc-2.17^{{}}\n", "b".repeat(40)).bytes());
+        check_remote_with(
+            "test-source",
+            &tags,
+            &local,
+            false,
+            || Ok(reply.clone()),
+            |_| panic!("successful response must not sleep"),
+        )
+        .unwrap();
+    }
+
+    #[test]
+    fn malformed_remote_response_fails_without_retry() {
+        let (tags, local, _) = remote_fixture();
+        let mut calls = 0;
+        let error = check_remote_with(
+            "test-source",
+            &tags,
+            &local,
+            false,
+            || {
+                calls += 1;
+                Ok(vec![0xff])
+            },
+            |_| panic!("invalid source response must not sleep"),
+        )
+        .unwrap_err();
+        assert!(error.starts_with("invalid source response:"));
+        assert_eq!(calls, 1);
     }
 }

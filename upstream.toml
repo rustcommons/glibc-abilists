@@ -1,9 +1,11 @@
-# Input to the collector. Changing this file changes the published data.
+# Input and online cross-check configuration for the collector.
+# Selection changes affect data; mirror URLs only change online comparisons.
 
 # The authoritative glibc repository; every tag must exist here.
 repository = "https://sourceware.org/git/glibc.git"
-# Independent mirrors; where one has a tag, its tag object must be identical.
-mirrors = ["https://github.com/bminor/glibc.git"]
+# Mirrors on separate hosting infrastructure; each advertised tag must match.
+# glibc documents this GNU Toolchain mirror: https://sourceware.org/glibc/wiki/GlibcGit
+mirrors = ["https://gitlab.com/gnutools/glibc.git"]
 
 # Release tags glibc-<first> .. glibc-<last>, every minor release in between.
 first = "2.17"

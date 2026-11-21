@@ -9,6 +9,15 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 ## [Unreleased]
 
+### Collector
+
+- Replace the archived GitHub cross-check endpoint with upstream's maintained
+  GNU Toolchain GitLab mirror, retaining sourceware as primary. Retry selected
+  transient remote-ref query errors with bounded backoff and distinguish source
+  unavailability from tag mismatch; both still block online collection after
+  the applicable checks. Dataset, signature/exception policy and library API
+  are unchanged; the collector remains unpublished.
+
 ### Repository security
 
 - Pin CI runners to Ubuntu 24.04/Windows 2025, report Rust compiler versions,

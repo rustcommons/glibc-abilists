@@ -34,6 +34,7 @@ used, and data is never taken from Zig or any other redistributor.
   Other architectures and libc implementations are planned.
 - Data comes only from glibc's upstream repository at release tags. Never edit
   files under `data/` or `src/generated.rs` by hand; rerun the collector.
+- Keep sourceware primary. Review mirror URL changes against upstream documentation; remote-ref retries must stay bounded and may never mask tag mismatches or skip an unavailable configured source. See [online source checks](docs/PROVENANCE.md#online-source-availability-and-mirror-choice).
 - Every release records its tag object, commit, tagger, signature result, and
   license evidence. Every file records its tree path, git blob id, SHA-256, and
   size. The collector fails closed: a bad signature, a changed license file, a

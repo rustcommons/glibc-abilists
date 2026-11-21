@@ -127,6 +127,24 @@ trusted checkout is needed for an offline comparison to provide additional
 evidence. See [offline collection and trust](PROVENANCE.md#offline-collection-and-trust)
 for the scope of the existing CI mitigation and the planned follow-up.
 
+## Online source failures
+
+The primary source remains sourceware. The default second host is the GNU
+Toolchain GitLab mirror documented by upstream; the existing `mirrors` list in
+`upstream.toml` permits reviewed URL changes. See
+[mirror choice and trust](PROVENANCE.md#online-source-availability-and-mirror-choice).
+
+Remote-ref queries make at most three attempts for recognized transient
+transport failures (2- and 4-second backoff). An exhausted query is `source unavailable`
+and stops collection, including for mirrors. A returned `tag mismatch` is an
+immediate hard failure and is never retried into acceptance or bypassed. Primary
+missing tags fail; missing mirror tags are still reported as absent to allow lag.
+Do not confuse a reachable mirror lacking a tag with an unreachable mirror.
+Investigate persistent failures; do not remove the cross-check or switch to
+`--offline` to make release validation appear green. CI performs the final online
+`--check`; deterministic collector tests cover retries/exhaustion and fail-closed
+mismatch behavior without network faults or real backoff sleeps.
+
 ## Rewrite deliberately
 
 Review or save existing work first. Never hand-edit `data/` or

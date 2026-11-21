@@ -52,6 +52,51 @@ Findings while assembling the keys (2026-10-10):
   ownership; their trust rests on the key fingerprints matching the
   signatures on glibc's official tags, not on the keyserver.
 
+## Online source availability and mirror choice
+
+Sourceware remains the primary source. The default cross-check mirror in
+`upstream.toml` is now `https://gitlab.com/gnutools/glibc.git`, listed by the
+[glibc project's Git guide](https://sourceware.org/glibc/wiki/GlibcGit) as an
+automatic mirror maintained by Carlos O'Donell. On 2026-11-21, both remotes
+advertised all 28 configured tag objects exactly as recorded in
+`data/releases.tsv`; their master refs also agreed at
+`4424039d28a41559e770751f81f52d1d4d81efda`. The
+[former GitHub mirror](https://github.com/bminor/glibc) was archived, with a
+last push reported as 2026-01-21. This maintenance change replaces a stale
+cross-check endpoint; it does not change the source dataset or recorded history.
+
+The GitLab mirror is a second hosting/availability boundary, **not an independent
+release authority**. It automatically follows sourceware and shares project
+maintainer trust; upstream compromise can propagate. Signatures, the existing
+exception limitations, primary tag identity, license and file checks remain
+necessary. The dated GitHub comparison above remains historical evidence.
+
+The collector makes at most three attempts for likely transient `git ls-remote`
+transport failures, waiting 2 then 4 seconds. Recognized Git diagnostics include
+HTTP 403/408/429/500/502/503/504 and selected DNS/connection/timeout failures.
+403 can be permanent denial as well as throttling; bounded retries do not
+establish its cause. Unknown, authentication and certificate failures fail
+immediately. Diagnostics are classified from Git's error text; unfamiliar
+wording can therefore fail immediately rather than retry.
+
+- `source unavailable`: the query failed; exhausted retries or a permanent error
+  stop online collection for the primary **or any configured mirror**.
+- `tag mismatch`: an advertised annotated tag object differs from the local
+  object. It fails immediately, without retry, skipping the mirror or falling
+  back to offline mode.
+- `required tag missing`: the primary is reachable but lacks a configured tag;
+  collection stops. Mirror-only missing tags remain counted as absent to allow
+  lag, as before. A frozen mirror would lose new-tag coverage, not necessarily
+  fail a future run; do not infer comparison of absent tags from overall success.
+- An invalid UTF-8 response fails separately as `invalid source response`.
+
+Mirror URLs remain configurable through the existing `mirrors` list in
+`upstream.toml`; review that trust change explicitly and keep sourceware primary.
+No source is silently dropped on network failure. Retry recovery improves
+availability without accepting mismatching data; a persistent outage still
+blocks collection. These retries cover remote ref queries, not every network
+operation (such as an initial clone or a partial clone's lazy object fetch).
+
 ## Per file (`data/files.tsv`, `glibc_abilists::AbiList`)
 
 | Field | Meaning |
