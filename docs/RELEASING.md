@@ -1,149 +1,153 @@
 # Release documentation and publication policy
 
-This policy governs the library package `glibc-abilists`. The collector is
-unpublished. [AGENTS.md](https://github.com/rustcommons/glibc-abilists/blob/main/AGENTS.md)
-remains primary; package publication, tags and GitHub Release publication need
-authorization. Preparing a PR or passing checks does not provide it.
+This policy governs the library package `glibc-abilists`. The collector and fuzz
+workspace are unpublished. [AGENTS.md](../AGENTS.md) remains primary. Preparing a
+PR or passing a dry run does not authorize a version bump, tag or publication.
 
-## Keep the reader record current
+## Changelog and notes are final before tagging
 
-Update the root [changelog](https://github.com/rustcommons/glibc-abilists/blob/main/CHANGELOG.md)
-under Unreleased when user-visible work is completed. Separate behavior/data
-changes from documentation-only changes and repository-only guides. Keep
-planned features in the roadmap, not in a shipped-version entry.
+Updating [CHANGELOG.md](../CHANGELOG.md) is critical: it is the source of the
+release notes. Add noteworthy changes to Unreleased in the same PR as the change.
+Separate data/behavior changes from documentation and repository-only tooling.
+Before an authorized release is tagged, finalize this exact dated heading:
 
-Before an authorized future version is published, commit dated changelog text
-and `docs/releases/vX.Y.Z.md` with a version title, concise outcome, and these
-four sections: Changes, Upgrade, Validation and limits, Links. State the actual
-package identity, source tag/commit, dependency impact and known limits. Link
-the detailed qualification evidence rather than substituting logs for release
-notes. Run the Python 3.11+ standard-library-only checker locally:
+```markdown
+## [X.Y.Z] - YYYY-MM-DD
+```
+
+Write `docs/releases/vX.Y.Z.md` from that entry and commit it before tagging.
+The first heading supplies the GitHub Release title. Notes must retain the
+required Changes, Upgrade, Validation and limits, and Links sections. State the
+source identity, dependency impact, bounded validation and known limits; link
+qualification evidence instead of inventing guarantees. The release gate refuses
+a tag release without the dated changelog entry and committed notes. Semantic
+agreement between the entry and notes still needs review.
+
+Run the standard-library-only documentation checker with Python 3.11+:
 
 ```sh
 python3 scripts/check-release-docs.py --repo rustcommons/glibc-abilists
 ```
 
-The local check has no network access. It verifies current manifest-version
-coverage, dated changelog entries, note sections and absolute release-body links.
-The [Release documentation workflow](https://github.com/rustcommons/glibc-abilists/blob/main/.github/workflows/release-docs.yml)
-runs that check on pushes/PRs. Routine merges require the registered CI check.
-For its first installation, GitHub cannot dispatch the workflow until it exists
-on the default branch. Independently review local checker and workflow syntax
-evidence, then authorize a normal bootstrap merge to register it. A green
-post-merge release-documentation workflow run is mandatory before bootstrap is
-complete or any GitHub Release notes are published; no candidate CI pass is
-claimed from the initial registration 404. Never suppress CI or CodeQL through
-commit or merge messages. Use scoped workflow conditions for bounded validation;
-explicitly dispatch release-documentation verification when required.
+It validates structure, version coverage, dates and release-body links. It does
+not prove historical correctness, collector trust or runtime compatibility.
+Never suppress CI/CodeQL through commit or merge messages. Existing provenance,
+license and [collection validation](COLLECTING.md#validate-the-change) gates still
+apply; successful `ci.yml` qualification of the tagged commit is mandatory.
+Do not regenerate ABI data to manufacture a documentation release.
 
-Its manual `verify_published` input additionally checks all live note bodies and
-the latest version; release events check the corresponding body using current
-default-branch docs, because old tags predate the backfill. Structure checks do
-not establish historical correctness or runtime behavior.
+## Standard pipeline
 
-Software release qualification still follows the
-[collection guide](https://github.com/rustcommons/glibc-abilists/blob/main/docs/COLLECTING.md#validate-the-change)
-and [release plan](https://github.com/rustcommons/glibc-abilists/blob/main/docs/RELEASE-PLAN.md).
-A documentation-history repair does not rerun old Rust tests or establish new
-runtime/platform qualification. Never regenerate ABI data to manufacture a
-documentation release.
+Follow the [Rust Commons Trusted Publishing standard](https://github.com/rustcommons/.github/blob/main/docs/TRUSTED-PUBLISHING.md).
+The workflow is named **Trusted publishing**. Its filename
+`.github/workflows/trusted-publishing.yml` and owner-reviewed `crates-io`
+environment must remain unchanged because crates.io's registration binds them.
+The owner-machine token was revoked on 2026-11-16; all future crate publication
+uses this workflow. Maintainers no longer create the GitHub Release by hand.
 
-## Backfill existing releases without replacing them
+Finalize notes → annotated tag → gate/build/attest → owner approval → publish →
+automatic GitHub Release → verify.
 
-For the 2026-11-02 backfill, preserve tags `v0.1.0`, `v0.1.1`, `v0.1.2`, their
-commits and immutable crates.io archives. Reconstruct user impact from source
-diffs, registry metadata and retained CI/records. Record original publication
-dates separately from the new GitHub Release publication time. State missing
-historical evidence; do not invent tests or change an old outcome.
+| Job | Display name | Repository behavior |
+| --- | --- | --- |
+| `gate` | Release gate | Check an annotated version-matching tag, main ancestry, successful CI, release crate set/dependency order, dated changelog entry and committed notes. |
+| `build` | Build | Rust 1.90.0 packaging/dry-run, workspace tests/fmt/Clippy/docs and release-doc checks; generate the library CycloneDX SBOM and SHA256SUMS. Upload `release-<version>` as a CI artifact. |
+| `attest` | Checksums and attestations | Re-check checksums and sign build provenance for crate/SBOM files; save `glibc-abilists-<version>.crates.intoto.jsonl`. |
+| `publish` | Publish to crates.io | Wait for owner approval of `crates-io`, re-check files, obtain short-lived OIDC credentials and publish in dependency order, skipping versions already on crates.io. Repackage with the same compiler and `cmp` against the attested crate before publishing. |
+| `github-release` | GitHub release | Create from finalized committed notes with `--verify-tag`, or add only missing authorized assets on a rerun. Never replace existing assets. |
+| `verify` | Verify publication | Check live notes, official archive/registry SHA-256 against the attested crate, provenance for the crate/SBOM and docs.rs build status. |
 
-The new changelog and versioned notes did not exist at those tags. Links from
-release bodies must be absolute and use valid current `main` documentation or
-the reviewed documentation commit. Never link to a nonexistent historical
-`blob/vOLD/CHANGELOG.md`. The
-[history evidence](https://github.com/rustcommons/glibc-abilists/blob/main/docs/RELEASE-HISTORY-20261102.md)
-identifies original source/registry dates and bounded checks.
-
-## Publish documentation after approval
-
-After reviewer/coordinator GO and a normal merge, read notes from the reviewed
-committed files. Create GitHub Release entries for existing tags in ascending
-order, using `gh release create` with `--verify-tag` and `--notes-file`.
-Use `--latest=false` for older releases and `--latest` only for the actual newest
-stable release. Confirm the target tag first; do not move or recreate it.
-The GitHub publication date is the actual backfill date, not the original
-crates.io date. If an entry already exists, inspect it and reconcile the approved
-documentation rather than creating a duplicate or changing its source identity.
-
-GitHub Releases document the software and may link source tags, crates.io,
-docs.rs and maintained guides. Distribution remains the existing crates.io
-package; no standalone binaries or other new attached assets are authorized.
-This repair needs no new crate version, dependency/lock change or `cargo publish`.
-
-## Completion evidence
-
-A release is complete under this convention when its source tag, applicable
-registry archive, live GitHub Release notes, changelog, documentation and required
-verification agree. A tag or successful crate upload alone is insufficient.
-After publishing notes, verify the live API's tag/name/body, non-draft status,
-source commit, latest designation, absence of new assets and all body links.
-Run the published check after the authorized backfill:
-
-```sh
-python3 scripts/check-release-docs.py --repo rustcommons/glibc-abilists --published
-```
-
-It reads GitHub with an optional existing `GH_TOKEN`/`GITHUB_TOKEN`; no new
-credentials are required for public read access. Explicitly dispatch the workflow
-with `verify_published=true` as well. Record the GitHub URL/publication timestamp
-and exact documentation commit in the requirements/release evidence. Keep old artifact/test outcomes identifiable.
-
-The initial 2026-11-02 inventory found no GitHub Release entries. The approved
-backfill is now complete: v0.1.0, v0.1.1 and v0.1.2 have exact committed notes,
-unchanged source tags and zero assets, with v0.1.2 latest. Bootstrap and full
-published-verification workflows passed after merge
-`5c180bd6985f8e9ee9fff54f3291ffe8f8a58da0`; see the dated
-[completion evidence](RELEASE-HISTORY-20261102.md#completed-backfill-and-verification).
-The initial registration 404 and transient unauthenticated API failure remain
-historical observations. Existing 0.1.2 artifact records remain unchanged; this
-evidence additionally covers GitHub Release documentation completion.
-
-## Trusted Publishing baseline
-
-The [publish workflow](https://github.com/rustcommons/glibc-abilists/blob/main/.github/workflows/trusted-publishing.yml)
-is the sole crate-publication route for future authorized releases, with owner
-approval of the `crates-io` environment. The owner-machine crates.io token was
-revoked on 2026-11-16; that publication route is retired. GitHub Release notes
-still follow the approval/completion rules above. Configure this exact Trusted Publisher
-on crates.io for `glibc-abilists`: repository owner `rustcommons`, repository
-`glibc-abilists`, workflow filename `trusted-publishing.yml`, environment `crates-io`.
-The collector is unpublished and needs no Trusted Publisher.
-
-A new `v*` tag triggers the environment approval. The workflow requires the tag
-version to match Cargo.toml and its commit to belong to main history, checks
-release documentation and workspace tests, packages the library, obtains a
-short-lived OIDC token, runs `cargo publish --locked -p glibc-abilists`, and
-compares the official archive and crates.io SHA-256 with the local package.
-The [verification script](https://github.com/rustcommons/glibc-abilists/blob/main/scripts/verify-crate-checksum.py)
-can also audit an existing version without credentials or publication.
-Tag/registry/release-note approval and the existing provenance/legal gates still
-apply. Never replay an existing tag to republish a version. No workflow has
-published a package as part of the 2026-11-15 security baseline installation.
-Scorecard reporting runs on main pushes and its weekly schedule; a configured
-badge is not evidence of a particular score. Binary SBOM/SLSA workflows do not
-apply: this repository distributes a Rust library crate, not release binaries.
+The release set is only `glibc-abilists`. The collector has `publish = false`;
+fuzz has its own unpublished workspace, so neither enters the release set. There are no executable
+installation checks because the shipped crate is a data library. The SBOM
+describes Cargo metadata; it is not runtime closure or complete glibc provenance
+qualification. CI qualification logs stay in the CI artifact, not release assets.
 
 ## Release-workflow maintenance checks
 
-Changes to `trusted-publishing.yml` run a separate PR `dry-run` job on
-`ubuntu-24.04`, using the release compiler Rust 1.90.0 and
-`cargo publish --dry-run --locked -p glibc-abilists`. This job has no crates-io
-environment, no OIDC permission and no registry credentials. It validates
-packaging/builds; it does not exercise the owner approval or token exchange.
-The tag-only publishing job remains separate and cannot run on a PR event.
-Cargo's expected dry-run message about aborting the upload is not a failed
-publication. Dependabot PRs retain their owner-approved core-only exception.
+Tag pushes (`v*`) may publish only after the gate passes. PRs touching release
+inputs and manual dispatch are dry runs: gate/build execute with `publish=false`,
+while attest/publish/github-release/verify remain skipped. This applies to the
+standard release workflow even for Dependabot-authored release-input PRs; other
+CI jobs retain their documented core-only bot policy. Dry runs exercise packaging
+and qualification without registry upload, OIDC or environment approval. Cargo's
+upload-aborted dry-run message is expected. Non-tag gate findings are reported;
+strict release refusal applies on tag pushes. A green dry run alone does not prove
+a future tag will pass the gate.
 
-Maintained runners use explicit Ubuntu 24.04 and Windows 2025 labels. Moving to
-Ubuntu 26.04 is a deliberate reviewed change. Rust jobs print compiler versions;
-see the dated [warning audit](CI-WARNINGS-20261121.md) for baseline evidence and
-remaining GitHub-managed CodeQL runner notices.
+Runners are Ubuntu 24.04; moving to Ubuntu 26.04 requires a reviewed change.
+Only newer runs of the same PR cancel one another; tag runs are never cancelled.
+Tools use exact versions/lock enforcement and actions use reviewed full SHAs.
+The 2026-11-21 adoption follows reviewed cargo-libc PR #43, reusing its gate script
+with the shared PR #44 CI-query correction and adapting only library-specific
+qualification/verification. The gate reads up to 100 runs for the exact commit
+and requires a successful conclusion; it does not use the unreliable success-status
+query filter.
+
+## Authorized assets and registration
+
+The owner authorized these GitHub Release assets on **2026-11-21**, and no others:
+
+- release `.crate` files (one for this repository);
+- `glibc-abilists-<version>.cdx.json` (CycloneDX SBOM);
+- `SHA256SUMS`;
+- `glibc-abilists-<version>.crates.intoto.jsonl` (provenance bundle).
+
+No standalone binaries, qualification logs or unrelated archives may be attached.
+Attestation subjects are the crate and SBOM; SHA256SUMS is their integrity index,
+and the bundle supplies verification material. The pipeline does not assert a
+SLSA level or replace glibc's signature/provenance policy.
+
+The existing crates.io Trusted Publisher configuration stays exactly:
+
+| Field | Value |
+| --- | --- |
+| Crate | `glibc-abilists` |
+| Repository owner | `rustcommons` |
+| Repository name | `glibc-abilists` |
+| Workflow filename | `trusted-publishing.yml` |
+| Environment | `crates-io` |
+
+The collector/fuzz workspace need no registration. No new credentials are
+provisioned. On partial failures, rerun the authorized tag workflow: already
+published versions are skipped and existing assets are retained. A changed or
+unexpected existing archive/body must be investigated; never move protected
+tags, overwrite assets or republish immutable versions to hide a mismatch.
+
+## Completion evidence
+
+A release is complete only when the source tag, registry archive, committed
+notes/changelog, GitHub Release, approved attached files and required verification
+agree. Retain exact commit, workflow/run URLs, checksum and attestation results.
+The official archive verifier remains available independently:
+
+```sh
+python3 scripts/verify-crate-checksum.py --version X.Y.Z --archive path/to/glibc-abilists-X.Y.Z.crate
+python3 scripts/check-release-docs.py --repo rustcommons/glibc-abilists --published-tag vX.Y.Z
+```
+
+The workflow verifies the recorded GitHub body, downloaded checksums, official
+archive bytes and crate/SBOM attestations bound to this repository/workflow.
+docs.rs failure fails verification; a queue still pending after the bounded wait
+is reported as **pending, not a pass**, and needs follow-up. Do not report the
+entire release as fully verified until that gap is closed. Dry runs cannot prove
+live publication, owner approval, actual attestations or docs.rs behavior.
+
+## Historical backfill and prior workflow
+
+The existing 0.1.0, 0.1.1 and 0.1.2 tags/registry archives are immutable. Their
+changelog entries and versioned notes were reconstructed on 2026-11-02, after
+their source tags. The authorized backfill manually created GitHub Releases in
+ascending order from committed notes, using `--verify-tag`; that was the process
+for that historical remediation, not the maintainer procedure for new releases.
+Do not attach adoption assets to those old releases or replay their tags.
+
+The backfill is complete: exact three bodies, unchanged tags, latest v0.1.2 and
+zero assets were verified after merge `5c180bd6985f8e9ee9fff54f3291ffe8f8a58da0`.
+[History evidence](RELEASE-HISTORY-20261102.md#completed-backfill-and-verification)
+preserves original publication dates, the initial registration 404, transient
+API failure and successful bootstrap/full-verification runs. The old
+[0.1.2 artifact record](RELEASE-0.1.2.md) and dated
+[CI warning audit](CI-WARNINGS-20261121.md) remain historical. Their prior
+`dry-run`/`publish` job layout is superseded by gate/build and the six-job flow.
+This adoption creates no tag, package version, publication or GitHub Release.
