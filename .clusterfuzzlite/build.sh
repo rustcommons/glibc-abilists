@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euxo pipefail
 cd "$SRC/glibc-abilists"
+rustc --version
+rustup show active-toolchain
 export CARGO_TARGET_DIR="$PWD/fuzz/target"
 # cargo-fuzz does not forward --locked. Fetch with lock enforcement, disable
 # network during compilation, and fail if the driver changes the lockfile.

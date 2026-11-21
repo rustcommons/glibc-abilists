@@ -11,6 +11,10 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 ### Repository security
 
+- Pin CI runners to Ubuntu 24.04/Windows 2025, report Rust compiler versions,
+  and validate release-workflow PRs with a credential-free Cargo publish dry-run.
+  No package, data or release version changes are involved.
+
 - Add isolated library-input and hash-padding fuzz targets, seeded corpora and
   digest-pinned ClusterFuzzLite builds with PR/batch fuzzing and crash SARIF.
   The library still does not parse ABI text or load runtime tables.

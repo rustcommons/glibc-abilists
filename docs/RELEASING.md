@@ -131,3 +131,19 @@ published a package as part of the 2026-11-15 security baseline installation.
 Scorecard reporting runs on main pushes and its weekly schedule; a configured
 badge is not evidence of a particular score. Binary SBOM/SLSA workflows do not
 apply: this repository distributes a Rust library crate, not release binaries.
+
+## Release-workflow maintenance checks
+
+Changes to `trusted-publishing.yml` run a separate PR `dry-run` job on
+`ubuntu-24.04`, using the release compiler Rust 1.90.0 and
+`cargo publish --dry-run --locked -p glibc-abilists`. This job has no crates-io
+environment, no OIDC permission and no registry credentials. It validates
+packaging/builds; it does not exercise the owner approval or token exchange.
+The tag-only publishing job remains separate and cannot run on a PR event.
+Cargo's expected dry-run message about aborting the upload is not a failed
+publication. Dependabot PRs retain their owner-approved core-only exception.
+
+Maintained runners use explicit Ubuntu 24.04 and Windows 2025 labels. Moving to
+Ubuntu 26.04 is a deliberate reviewed change. Rust jobs print compiler versions;
+see the dated [warning audit](CI-WARNINGS-20261121.md) for baseline evidence and
+remaining GitHub-managed CodeQL runner notices.

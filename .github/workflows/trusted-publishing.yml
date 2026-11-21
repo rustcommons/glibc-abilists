@@ -2,14 +2,38 @@ name: Publish crate
 on:
   push:
     tags: ['v*']
+  pull_request:
+    paths:
+      - '.github/workflows/trusted-publishing.yml'
 permissions:
   contents: read
 concurrency:
-  group: publish-${{ github.ref }}
-  cancel-in-progress: false
+  group: publish-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
+  dry-run:
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install and report the release toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup set auto-self-update disable
+          rustup toolchain install 1.90.0 --profile minimal
+          rustup default 1.90.0
+          rustc --version
+      - run: python3 scripts/check-release-docs.py --repo "$GITHUB_REPOSITORY"
+      - name: Validate the release package without credentials or upload
+        run: cargo publish --dry-run --locked -p glibc-abilists
   publish:
-    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
     environment: crates-io
     permissions:
       contents: read
@@ -26,6 +50,7 @@ jobs:
           rustup set auto-self-update disable
           rustup toolchain install 1.90.0 --profile minimal
           rustup default 1.90.0
+          rustc --version
       - name: Require a version-matching tag on reviewed main history
         env:
           RELEASE_TAG: ${{ github.ref_name }}
