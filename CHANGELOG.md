@@ -11,6 +11,11 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 ### Repository
 
+- Keep all release compilation/verification in Build. Repackage without
+  verification and compare attested bytes in publish, then scope credentials
+  only to the no-verify upload step. Retain already-published version skips and
+  skip release Build for fork PRs.
+
 - Adopt the standard Trusted Publishing pipeline with release gate, Build,
   attestations, owner-approved crates.io publication, automatic GitHub Release
   creation and verification. Use dated changelog entries as the source of

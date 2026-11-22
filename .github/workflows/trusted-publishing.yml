@@ -60,6 +60,7 @@ jobs:
   build:
     name: Build
     needs: gate
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
@@ -197,24 +198,41 @@ jobs:
           path: ${{ runner.temp }}/dist
       - name: Re-check SHA256SUMS
         run: cd "$RUNNER_TEMP/dist" && sha256sum -c SHA256SUMS
-      - uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9 # v1.0.6
-        id: auth
-      - name: Publish release crates in dependency order
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
+      # Crate/dependency compilation and verification builds finish in Build.
+      - name: Prepare unpublished release crates without registry credentials
+        id: prepare
         run: |
           set -euo pipefail
+          unset CARGO_REGISTRY_TOKEN
+          pending='[]'
           for crate in $(jq -r '.[]' <<<"$CRATES"); do
-            status=$(curl -s -o /dev/null -w '%{http_code}' -A 'rustcommons-release' \
+            status=$(curl -sS -o /dev/null -w '%{http_code}' -A 'rustcommons-release' \
               "https://crates.io/api/v1/crates/$crate/$VERSION")
             if [ "$status" = 200 ]; then
               echo "$crate $VERSION is already on crates.io; skipping."
               continue
             fi
-            # Publish only bytes identical to the checksummed, attested file.
-            cargo package --locked -p "$crate"
+            if [ "$status" != 404 ]; then
+              echo "::error::Cannot determine publication status for $crate $VERSION (HTTP $status)."
+              exit 1
+            fi
+            cargo package --locked --no-verify -p "$crate"
             cmp "target/package/$crate-$VERSION.crate" "$RUNNER_TEMP/dist/$crate-$VERSION.crate"
-            cargo publish --locked -p "$crate"
+            pending=$(jq -c --arg crate "$crate" '. + [$crate]' <<<"$pending")
+          done
+          echo "crates=$pending" >> "$GITHUB_OUTPUT"
+      - uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9 # v1.0.6
+        if: steps.prepare.outputs.crates != '[]'
+        id: auth
+      - name: Publish prepared release crates in dependency order
+        if: steps.prepare.outputs.crates != '[]'
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
+          PUBLISH_CRATES: ${{ steps.prepare.outputs.crates }}
+        run: |
+          set -euo pipefail
+          for crate in $(jq -r '.[]' <<<"$PUBLISH_CRATES"); do
+            cargo publish --locked --no-verify -p "$crate"
           done
 
   github-release:

@@ -53,7 +53,7 @@ automatic GitHub Release → verify.
 | `gate` | Release gate | Check an annotated version-matching tag, main ancestry, successful CI, release crate set/dependency order, dated changelog entry and committed notes. |
 | `build` | Build | Rust 1.90.0 packaging/dry-run, workspace tests/fmt/Clippy/docs and release-doc checks; generate the library CycloneDX SBOM and SHA256SUMS. Upload `release-<version>` as a CI artifact. |
 | `attest` | Checksums and attestations | Re-check checksums and sign build provenance for crate/SBOM files; save `glibc-abilists-<version>.crates.intoto.jsonl`. |
-| `publish` | Publish to crates.io | Wait for owner approval of `crates-io`, re-check files, obtain short-lived OIDC credentials and publish in dependency order, skipping versions already on crates.io. Repackage with the same compiler and `cmp` against the attested crate before publishing. |
+| `publish` | Publish to crates.io | Wait for owner approval of `crates-io`, re-check files, and identify unpublished versions. Nothing compiles in this job: use `cargo package --locked --no-verify` and `cmp` against attested crates without registry credentials. All crate/dependency compilation and package verification builds belong in Build. Then obtain short-lived OIDC credentials and run only `cargo publish --locked --no-verify` in dependency order for the prepared list; already-published versions remain skipped. |
 | `github-release` | GitHub release | Create from finalized committed notes with `--verify-tag`, or add only missing authorized assets on a rerun. Never replace existing assets. |
 | `verify` | Verify publication | Check live notes, official archive/registry SHA-256 against the attested crate, provenance for the crate/SBOM and docs.rs build status. |
 
@@ -66,8 +66,10 @@ qualification. CI qualification logs stay in the CI artifact, not release assets
 ## Release-workflow maintenance checks
 
 Tag pushes (`v*`) may publish only after the gate passes. PRs touching release
-inputs and manual dispatch are dry runs: gate/build execute with `publish=false`,
-while attest/publish/github-release/verify remain skipped. This applies to the
+inputs from the same repository and manual dispatch are dry runs: gate/build
+execute with `publish=false`,
+while attest/publish/github-release/verify remain skipped. Fork PRs skip Build
+in this workflow, which contains OIDC-enabled jobs; their gate still runs. This applies to the
 standard release workflow even for Dependabot-authored release-input PRs; other
 CI jobs retain their documented core-only bot policy. Dry runs exercise packaging
 and qualification without registry upload, OIDC or environment approval. Cargo's
