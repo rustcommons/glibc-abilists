@@ -11,6 +11,9 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 ### Repository
 
+- Use the unified attestation action for release provenance, preserving subject
+  paths, bundle outputs, permissions and workflow-bound verification.
+
 - Keep all release compilation/verification in Build. Repackage without
   verification and compare attested bytes in publish, then scope credentials
   only to the no-verify upload step. Retain already-published version skips and
