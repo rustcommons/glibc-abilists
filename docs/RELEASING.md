@@ -53,9 +53,9 @@ automatic GitHub Release → verify.
 | `gate` | Release gate | Check an annotated version-matching tag, main ancestry, successful CI, release crate set/dependency order, dated changelog entry and committed notes. |
 | `build` | Build | Rust 1.90.0 packaging/dry-run, workspace tests/fmt/Clippy/docs and release-doc checks; generate the library CycloneDX SBOM and SHA256SUMS. Upload `release-<version>` as a CI artifact. |
 | `attest` | Checksums and attestations | Re-check checksums and sign build provenance for crate/SBOM files; save `glibc-abilists-<version>.crates.intoto.jsonl`. |
-| `publish` | Publish to crates.io | Wait for owner approval of `crates-io`, re-check files, and identify unpublished versions. Nothing compiles in this job: use `cargo package --locked --no-verify` and `cmp` against attested crates without registry credentials. All crate/dependency compilation and package verification builds belong in Build. Then obtain short-lived OIDC credentials and run only `cargo publish --locked --no-verify` in dependency order for the prepared list; already-published versions remain skipped. |
-| `github-release` | GitHub release | Create from finalized committed notes with `--verify-tag`, or add only missing authorized assets on a rerun. Never replace existing assets. |
-| `verify` | Verify publication | Check live notes, official archive/registry SHA-256 against the attested crate, provenance for the crate/SBOM and docs.rs build status. |
+| `publish` | Publish to crates.io | Wait for owner approval of `crates-io`, re-check files, and identify unpublished versions. Nothing compiles in this job: use `cargo package --locked --no-verify` and `cmp` against attested crates without registry credentials. All crate/dependency compilation and package verification builds belong in Build. Sign SHA256SUMS and verify it against the committed public key before publication, even on already-published-version reruns. Then obtain short-lived OIDC credentials and run only `cargo publish --locked --no-verify` in dependency order for the prepared list; already-published versions remain skipped. |
+| `github-release` | GitHub release | Create/resume a draft from finalized committed notes with `--verify-tag`. Check tag/title/body/target and every asset name/size/digest before publishing. Never replace assets or modify a published release. |
+| `verify` | Verify publication | Check the pinned OpenPGP primary/VALIDSIG and every SHA256SUMS entry, live notes, official archive/registry SHA-256, crate/SBOM provenance and docs.rs build status. |
 
 The release set is only `glibc-abilists`. The collector has `publish = false`;
 fuzz has its own unpublished workspace, so neither enters the release set. There are no executable
@@ -88,11 +88,12 @@ query filter.
 
 ## Authorized assets and registration
 
-The owner authorized these GitHub Release assets on **2026-11-21**, and no others:
+The owner authorized the original assets on **2026-11-21** and additionally
+authorized `SHA256SUMS.asc` on **2026-11-25**, with no other additions:
 
 - release `.crate` files (one for this repository);
 - `glibc-abilists-<version>.cdx.json` (CycloneDX SBOM);
-- `SHA256SUMS`;
+- `SHA256SUMS` and `SHA256SUMS.asc`;
 - `glibc-abilists-<version>.crates.intoto.jsonl` (provenance bundle).
 
 No standalone binaries, qualification logs or unrelated archives may be attached.
@@ -116,6 +117,60 @@ published versions are skipped and existing assets are retained. A changed or
 unexpected existing archive/body must be investigated; never move protected
 tags, overwrite assets or republish immutable versions to hide a mismatch.
 
+## OpenPGP release signing
+
+The committed [.github/release-signing-key.asc](../.github/release-signing-key.asc)
+is an unchanged copy of the [organization public key](https://github.com/rustcommons/.github/blob/main/docs/RELEASE-SIGNING-KEY.asc)
+from merged org PR #24 (the main copy has identical bytes). The pinned primary is
+`B281C3010A76A11737B4D066C7396F6EA7647CC6`; the selected signing subkey is
+`248DFD639B75D1EFF2A87289D7C7DE7BBCCF35EC!`. This key authenticates organization
+release checksums, not glibc upstream tags; it does not strengthen the collector's
+signature-exception or offline-provenance guarantees.
+
+Only the publish job's signing step receives `RELEASE_SIGNING_KEY` and
+`RELEASE_SIGNING_PASSPHRASE` from the owner-approved crates-io environment.
+The stdlib helper creates mode-700 temporary GnuPG homes (mkdtemp, equivalent to
+mktemp -d), imports the signing subkey, passes the passphrase only through stdin
+and signs SHA256SUMS. A second home imports only the committed public key,
+requires its primary to match the constant, and parses GPG VALIDSIG for that
+primary. Verification refuses REVKEYSIG, KEYREVOKED, BADSIG, ERRSIG, EXPSIG
+or NO_PUBKEY and requires exactly one GOODSIG/EXPKEYSIG and one VALIDSIG.
+EXPKEYSIG/KEYEXPIRED is accepted only when VALIDSIG's signature timestamp
+precedes that signing key's expiry in the imported key's colon listing. A
+revoked subkey is always refused; routine expiry preserves earlier signatures.
+These checks follow [org PR #26](https://github.com/rustcommons/.github/pull/26).
+Both agents are stopped and both homes removed even on failure.
+Signing failure stops the job before token minting or publication. Signing and
+signature-artifact upload are unconditional after successful preparation, even
+when all crate versions already exist. No crate/dependency code compiles there.
+
+The signature travels as a separate CI artifact into github-release, which
+verifies it and all listed hashes before uploading. Only a complete, matching
+draft is published; mismatched existing assets stop the job without replacement.
+A published release is checked read-only and never modified. Retrying only failed
+jobs can reuse prior successful jobs' artifacts; changed candidate assets must
+not be forced over existing assets.
+
+After downloading release assets, verification uses a fresh home holding only
+the committed key and requires the pinned primary in VALIDSIG, then runs
+`sha256sum --check` for every listed asset:
+
+```sh
+python3 scripts/release_signing.py verify --checksums path/to/SHA256SUMS
+```
+
+See the [README verification instructions](../README.md#verify-release-assets)
+for manual GnuPG commands. Production sign/verify commands accept no test-key or
+fingerprint override. Build tests exercise the same private GnuPG operations with
+an ephemeral protected signing subkey plus generated revoked/expired subkeys;
+the fixed-pin production entry points reject test keys. Build has no signing secrets and performs no real-key signing.
+
+These assets apply to releases produced after signing adoption. Existing
+0.1.0–0.1.2 releases retain their historical zero-asset layout and archive/body
+verification; they are not retroactively signed. This repository has no binary
+asset-layout verifier to migrate. Live real-key signing remains deferred until
+a separately authorized release; a green dry run proves only the ephemeral tests.
+
 ## Completion evidence
 
 A release is complete only when the source tag, registry archive, committed
@@ -128,7 +183,8 @@ python3 scripts/verify-crate-checksum.py --version X.Y.Z --archive path/to/glibc
 python3 scripts/check-release-docs.py --repo rustcommons/glibc-abilists --published-tag vX.Y.Z
 ```
 
-The workflow verifies the recorded GitHub body, downloaded checksums, official
+The workflow verifies the recorded GitHub body, pinned OpenPGP signature, every
+downloaded checksum, official
 archive bytes and crate/SBOM attestations bound to this repository/workflow.
 docs.rs failure fails verification; a queue still pending after the bounded wait
 is reported as **pending, not a pass**, and needs follow-up. Do not report the

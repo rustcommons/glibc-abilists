@@ -11,6 +11,13 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 ### Repository
 
+- Sign release SHA256SUMS with the organization OpenPGP key, verify the pinned
+  primary fingerprint before publication, attach SHA256SUMS.asc, and verify
+  signatures/checksums after publication. Create or resume checked drafts and
+  preserve existing release assets; test signing with ephemeral keys only. Refuse
+  revoked signatures and accept expired-subkey signatures only when signed before
+  that subkey expired, preserving verification across routine rotation.
+
 - Use the unified attestation action for release provenance, preserving subject
   paths, bundle outputs, permissions and workflow-bound verification.
 
