@@ -70,11 +70,30 @@ def _verify_signature(checksums: Path, signature: Path, public_key: bytes,
         _gpg(home, '--import', input=public_key)
         _require_primary(home, expected_primary)
         status = _gpg(home, '--status-fd', '1', '--verify', str(signature), str(checksums)).decode()
-        valid = [line.split() for line in status.splitlines()
-                 if line.startswith('[GNUPG:] VALIDSIG ')]
+        records = [line.split()[1:] for line in status.splitlines()
+                   if line.startswith('[GNUPG:] ')]
+        forbidden = {'REVKEYSIG', 'KEYREVOKED', 'BADSIG', 'ERRSIG', 'EXPSIG', 'NO_PUBKEY'}
+        if any(record[0] in forbidden for record in records):
+            raise ValueError('Signature has a revoked, bad, expired-signature or unknown-key status')
+        good = [record for record in records if record[0] in ('GOODSIG', 'EXPKEYSIG')]
+        valid = [record for record in records if record[0] == 'VALIDSIG']
         # VALIDSIG names the signing subkey first, and the primary key last.
-        if len(valid) != 1 or len(valid[0]) != 12 or valid[0][11] != expected_primary:
-            raise ValueError('Signature does not report the pinned primary fingerprint')
+        if len(good) != 1 or len(valid) != 1 or len(valid[0]) != 11 or valid[0][-1] != expected_primary:
+            raise ValueError('Expected exactly one good signature by the pinned primary')
+        if any(record[0] in ('EXPKEYSIG', 'KEYEXPIRED') for record in records):
+            signing_key, signed_at = valid[0][1], valid[0][3]
+            listing = _gpg(home, '--with-colons', '--fingerprint', '--list-keys').decode()
+            expiry, signing_expiry = '', None
+            for line in listing.splitlines():
+                fields = line.split(':')
+                if fields[0] in ('pub', 'sub'):
+                    expiry = fields[6]
+                elif fields[0] == 'fpr' and fields[9] == signing_key:
+                    signing_expiry = expiry
+                    break
+            if (not signed_at.isdigit() or not signing_expiry or not signing_expiry.isdigit()
+                    or int(signing_expiry) <= 0 or int(signed_at) >= int(signing_expiry)):
+                raise ValueError('Signature was not made before the signing key expired')
 
 
 def _sign_and_verify(checksums: Path, signature: Path, secret_key: bytes,

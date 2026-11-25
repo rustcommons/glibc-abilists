@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
@@ -95,6 +96,75 @@ class SigningTests(unittest.TestCase):
             return result
         with patch.object(signing, '_gpg', side_effect=altered_status), self.assertRaises(ValueError):
             signing._verify_signature(self.checksums, self.signature, self.public, self.primary)
+
+    def historical_fixture(self, home, expiry):
+        created = int(time.time()) - 3 * 86400
+        options = ('--faked-system-time', str(created), '--pinentry-mode', 'loopback',
+                   '--passphrase-fd', '0')
+        signing._gpg(home, *options, '--quick-generate-key',
+                     'Historical Test <history@example.invalid>', 'ed25519', 'cert', '0', input=b'\n')
+        listing = signing._gpg(home, '--with-colons', '--fingerprint', '--list-keys').decode()
+        primary = next(line.split(':')[9] for line in listing.splitlines() if line.startswith('fpr:'))
+        signing._gpg(home, *options, '--quick-add-key', primary, 'ed25519', 'sign', expiry, input=b'\n')
+        listing = signing._gpg(home, '--with-colons', '--fingerprint', '--list-keys').decode()
+        subkey = [line.split(':')[9] for line in listing.splitlines() if line.startswith('fpr:')][-1]
+        signing._gpg(home, '--faked-system-time', str(created + 3600), '--local-user', subkey + '!',
+                     '--armor', '--detach-sign', '--output', str(self.signature), str(self.checksums))
+        return primary
+
+    def test_expired_subkey_signature_from_before_expiry_is_accepted(self):
+        with signing._home() as home:
+            primary = self.historical_fixture(home, '1d')
+            public = signing._gpg(home, '--armor', '--export', primary)
+            status = signing._gpg(home, '--status-fd', '1', '--verify',
+                                  str(self.signature), str(self.checksums)).decode()
+            self.assertIn('[GNUPG:] EXPKEYSIG ', status)
+            self.assertIn('[GNUPG:] KEYEXPIRED ', status)
+            listing = signing._gpg(home, '--with-colons', '--list-keys').decode()
+            expiry = next(line.split(':')[6] for line in listing.splitlines() if line.startswith('sub:'))
+        signing._verify_signature(self.checksums, self.signature, public, primary)
+        original = signing._gpg
+        for signed_at in (expiry, str(int(expiry) + 1)):
+            def at_or_after_expiry(home, *args, **kwargs):
+                result = original(home, *args, **kwargs)
+                if args[:2] == ('--status-fd', '1'):
+                    lines = []
+                    for line in result.decode().splitlines():
+                        fields = line.split()
+                        if fields[:2] == ['[GNUPG:]', 'VALIDSIG']:
+                            fields[4] = signed_at
+                            line = ' '.join(fields)
+                        lines.append(line)
+                    return ('\n'.join(lines) + '\n').encode()
+                return result
+            with patch.object(signing, '_gpg', side_effect=at_or_after_expiry), self.assertRaises(ValueError):
+                signing._verify_signature(self.checksums, self.signature, public, primary)
+
+    def test_revoked_subkey_is_refused_even_with_validsig(self):
+        with signing._home() as home:
+            primary = self.historical_fixture(home, '0')
+            signing._gpg(home, '--command-fd', '0', '--pinentry-mode', 'loopback',
+                         '--edit-key', primary, input=b'key 1\nrevkey\ny\n0\n\ny\nsave\n')
+            public = signing._gpg(home, '--armor', '--export', primary)
+            status = signing._gpg(home, '--status-fd', '1', '--verify',
+                                  str(self.signature), str(self.checksums)).decode()
+            self.assertIn('[GNUPG:] REVKEYSIG ', status)
+            self.assertIn('[GNUPG:] VALIDSIG ', status)
+        with self.assertRaises(ValueError):
+            signing._verify_signature(self.checksums, self.signature, public, primary)
+
+    def test_bad_status_and_signature_counts_are_refused(self):
+        self.sign_fixture()
+        original = signing._gpg
+        for extra in ('REVKEYSIG', 'KEYREVOKED', 'BADSIG', 'ERRSIG', 'EXPSIG', 'NO_PUBKEY',
+                      'GOODSIG', 'VALIDSIG'):
+            def extra_status(home, *args, **kwargs):
+                result = original(home, *args, **kwargs)
+                if args[:2] == ('--status-fd', '1'):
+                    return result + ('[GNUPG:] ' + extra + ' fixture\n').encode()
+                return result
+            with patch.object(signing, '_gpg', side_effect=extra_status), self.assertRaises(ValueError):
+                signing._verify_signature(self.checksums, self.signature, self.public, self.primary)
 
     def test_wrong_trust_pin_is_rejected(self):
         self.sign_fixture()

@@ -67,15 +67,17 @@ curl -fsSLo release-signing-key.asc https://raw.githubusercontent.com/rustcommon
   trap 'gpgconf --kill gpg-agent; rm -rf "$GNUPGHOME"' EXIT
   gpg --import release-signing-key.asc
   gpg --fingerprint B281C3010A76A11737B4D066C7396F6EA7647CC6
-  gpg --verify SHA256SUMS.asc SHA256SUMS
+  gpg --status-fd 1 --verify SHA256SUMS.asc SHA256SUMS
   sha256sum --check SHA256SUMS
 )
 ```
 
 The only primary fingerprint must be
 **B281C3010A76A11737B4D066C7396F6EA7647CC6**. Check it before trusting the key;
-GnuPG trust warnings do not replace this fingerprint check. Repository users can
-use the [fixed-pin verification script](https://github.com/rustcommons/glibc-abilists/blob/main/scripts/release_signing.py)
+GnuPG trust warnings do not replace this fingerprint check. Also apply the
+[release policy's signature-status checks](https://github.com/rustcommons/glibc-abilists/blob/main/docs/RELEASING.md#openpgp-release-signing):
+GnuPG can exit successfully for a revoked or expired key. Repository users can
+enforce the pin and status/expiry checks automatically with the [fixed-pin verification script](https://github.com/rustcommons/glibc-abilists/blob/main/scripts/release_signing.py)
 instead. Earlier 0.1.0–0.1.2 releases keep their existing archive verification,
 as described in the [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/docs/RELEASING.md).
 

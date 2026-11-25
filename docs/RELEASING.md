@@ -133,7 +133,13 @@ The stdlib helper creates mode-700 temporary GnuPG homes (mkdtemp, equivalent to
 mktemp -d), imports the signing subkey, passes the passphrase only through stdin
 and signs SHA256SUMS. A second home imports only the committed public key,
 requires its primary to match the constant, and parses GPG VALIDSIG for that
-primary. Both agents are stopped and both homes removed even on failure.
+primary. Verification refuses REVKEYSIG, KEYREVOKED, BADSIG, ERRSIG, EXPSIG
+or NO_PUBKEY and requires exactly one GOODSIG/EXPKEYSIG and one VALIDSIG.
+EXPKEYSIG/KEYEXPIRED is accepted only when VALIDSIG's signature timestamp
+precedes that signing key's expiry in the imported key's colon listing. A
+revoked subkey is always refused; routine expiry preserves earlier signatures.
+These checks follow [org PR #26](https://github.com/rustcommons/.github/pull/26).
+Both agents are stopped and both homes removed even on failure.
 Signing failure stops the job before token minting or publication. Signing and
 signature-artifact upload are unconditional after successful preparation, even
 when all crate versions already exist. No crate/dependency code compiles there.
@@ -156,8 +162,8 @@ python3 scripts/release_signing.py verify --checksums path/to/SHA256SUMS
 See the [README verification instructions](../README.md#verify-release-assets)
 for manual GnuPG commands. Production sign/verify commands accept no test-key or
 fingerprint override. Build tests exercise the same private GnuPG operations with
-an ephemeral protected signing subkey; the fixed-pin production entry points
-reject it. Build has no signing secrets and performs no real-key signing.
+an ephemeral protected signing subkey plus generated revoked/expired subkeys;
+the fixed-pin production entry points reject test keys. Build has no signing secrets and performs no real-key signing.
 
 These assets apply to releases produced after signing adoption. Existing
 0.1.0–0.1.2 releases retain their historical zero-asset layout and archive/body
