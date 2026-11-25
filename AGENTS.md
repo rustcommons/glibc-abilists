@@ -27,6 +27,7 @@ used, and data is never taken from Zig or any other redistributor.
 | `src/` | The published crate's accessor code (generated tables) | LGPL-2.1-or-later |
 | `collector/` | The collector that produces `data/` and `src/generated.rs` | MIT (not published) |
 | `keys/` | Public keys of glibc release managers, with their origin | Public keys; no license claimed |
+| `.github/release-signing-key.asc` | Organization release-checksum verification key; separate from upstream tag keys | Public key; no license claimed |
 
 ## Scope and implementation
 
@@ -90,8 +91,11 @@ for packaging changes. Never publish to crates.io without the user's go-ahead.
 
 - Updating `CHANGELOG.md` is critical: it is the source of the release notes. Add changes to Unreleased in the same PR as the change. Before tagging, finalize a dated `## [X.Y.Z] - YYYY-MM-DD` entry and `docs/releases/vX.Y.Z.md`; the release gate refuses publication without the dated entry and committed notes.
 - Follow the [org Trusted Publishing standard](https://github.com/rustcommons/.github/blob/main/docs/TRUSTED-PUBLISHING.md): `Trusted publishing` runs `gate` (Release gate), `build` (Build), `attest` (Checksums and attestations), `publish` (Publish to crates.io), `github-release` (GitHub release) and `verify` (Verify publication). Same-repository PR/manual dry runs run gate/build with `publish=false`; fork PRs skip Build; tag runs proceed through attestation and owner approval of `crates-io` before publication. The unpublished collector is never a release crate.
-- The owner authorized attaching only the release `.crate` files, the SBOM, `SHA256SUMS` and `glibc-abilists-<version>.crates.intoto.jsonl` on 2026-11-21. No standalone binaries or other custom release assets are authorized. The workflow creates the GitHub Release from the finalized committed notes; maintainers no longer create it by hand.
+- The owner authorized attaching only the release `.crate` files, the SBOM, `SHA256SUMS` and `glibc-abilists-<version>.crates.intoto.jsonl` on 2026-11-21. On 2026-11-25 the owner additionally authorized `SHA256SUMS.asc`, verified with primary fingerprint `B281C3010A76A11737B4D066C7396F6EA7647CC6`. No standalone binaries or other custom release assets are authorized. The workflow creates the GitHub Release from the finalized committed notes; maintainers no longer create it by hand.
 - Build and publish use the same exact toolchain. Nothing compiles in the publish job: use `cargo package --locked --no-verify` there and compare its bytes with the attested archive before minting registry credentials; all crate/dependency compilation and package verification builds belong in Build. Scope `CARGO_REGISTRY_TOKEN` only to the upload step using `cargo publish --locked --no-verify`; retain token-free preparation and skip release Build for fork PRs. Keep dependency-order/idempotent publication, immutable existing release assets and post-publication registry/attestation/docs.rs verification. Pipeline adoption itself authorizes no version bump, tag, upload or release; first live use needs its own release authorization.
+
+- In publish, sign SHA256SUMS before token minting or registry publication, including reruns whose crate versions already exist. Scope signing environment secrets only to that step; pass the passphrase only over stdin. Verify immediately in a separate temporary GnuPG home using only the committed public key and the pinned primary fingerprint, then kill the homes' agents and delete the homes. No production CLI/env override may weaken the fingerprint pin. PR Build tests use only ephemeral throwaway keys.
+- GitHub releases are draft-first: check metadata and every asset's name/size/digest, never replace an existing asset, never modify a published release. Verify downloaded OpenPGP signatures and every checksum entry after publication; old release records keep their original layouts.
 
 ## Fuzzing, SAST and installation pins
 

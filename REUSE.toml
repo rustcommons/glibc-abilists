@@ -23,3 +23,15 @@ path = ["fuzz/corpus/hash_padding/glibc-*.abilist"]
 precedence = "override"
 SPDX-FileCopyrightText = "Free Software Foundation, Inc. and the GNU C Library contributors"
 SPDX-License-Identifier = "LGPL-2.1-or-later"
+
+[[annotations]]
+path = ["scripts/release_signing.py", "scripts/test_release_signing.py", "scripts/github_release.py", "scripts/test_github_release.py"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "rustcommons contributors"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = [".github/release-signing-key.asc"]
+precedence = "override"
+SPDX-FileCopyrightText = "The release signing key holder"
+SPDX-License-Identifier = "LicenseRef-public-key"

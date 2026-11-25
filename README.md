@@ -52,6 +52,33 @@ println!("{} {} {:?}", release.tag, release.commit, release.signature);
 - [Collection guide](https://github.com/rustcommons/glibc-abilists/blob/main/docs/COLLECTING.md): maintainer setup, checking, regeneration, and validation.
 - [Roadmap](https://github.com/rustcommons/glibc-abilists/blob/main/docs/ROADMAP.md) and [release plan](https://github.com/rustcommons/glibc-abilists/blob/main/docs/RELEASE-PLAN.md).
 
+## Verify release assets
+
+Releases produced after OpenPGP signing adoption include `SHA256SUMS.asc`.
+Download the release assets into one directory, then fetch the public key and
+verify with GnuPG and sha256sum (optional tools; not needed to use the library):
+
+```sh
+curl -fsSLo release-signing-key.asc https://raw.githubusercontent.com/rustcommons/glibc-abilists/main/.github/release-signing-key.asc
+(
+  set -eu
+  export GNUPGHOME="$(mktemp -d)"
+  chmod 700 "$GNUPGHOME"
+  trap 'gpgconf --kill gpg-agent; rm -rf "$GNUPGHOME"' EXIT
+  gpg --import release-signing-key.asc
+  gpg --fingerprint B281C3010A76A11737B4D066C7396F6EA7647CC6
+  gpg --verify SHA256SUMS.asc SHA256SUMS
+  sha256sum --check SHA256SUMS
+)
+```
+
+The only primary fingerprint must be
+**B281C3010A76A11737B4D066C7396F6EA7647CC6**. Check it before trusting the key;
+GnuPG trust warnings do not replace this fingerprint check. Repository users can
+use the [fixed-pin verification script](https://github.com/rustcommons/glibc-abilists/blob/main/scripts/release_signing.py)
+instead. Earlier 0.1.0–0.1.2 releases keep their existing archive verification,
+as described in the [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/docs/RELEASING.md).
+
 ## License and credit
 
 The data and published crate are **LGPL-2.1-or-later**, Copyright (C) Free
