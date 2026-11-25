@@ -11,6 +11,10 @@ and [release policy](https://github.com/rustcommons/glibc-abilists/blob/main/doc
 
 ### Repository
 
+- Keep signatures from a newer non-expiring signing subkey verifiable when an
+  expired sibling emits KEYEXPIRED; retain checks for the actual expired signer
+  and accept its pre-expiry signatures.
+
 - Sign release SHA256SUMS with the organization OpenPGP key, verify the pinned
   primary fingerprint before publication, attach SHA256SUMS.asc, and verify
   signatures/checksums after publication. Create or resume checked drafts and
