@@ -140,6 +140,27 @@ class SigningTests(unittest.TestCase):
             with patch.object(signing, '_gpg', side_effect=at_or_after_expiry), self.assertRaises(ValueError):
                 signing._verify_signature(self.checksums, self.signature, public, primary)
 
+    def test_expired_sibling_does_not_reject_new_nonexpiring_subkey(self):
+        with signing._home() as home:
+            primary = self.historical_fixture(home, '1d')
+            old_signature = self.root / 'old-signature.asc'
+            self.signature.rename(old_signature)
+            signing._gpg(home, '--pinentry-mode', 'loopback', '--passphrase-fd', '0',
+                         '--quick-add-key', primary, 'ed25519', 'sign', '0', input=b'\n')
+            listing = signing._gpg(home, '--with-colons', '--fingerprint', '--list-keys').decode()
+            new_subkey = [line.split(':')[9] for line in listing.splitlines()
+                          if line.startswith('fpr:')][-1]
+            signing._gpg(home, '--local-user', new_subkey + '!', '--armor', '--detach-sign',
+                         '--output', str(self.signature), str(self.checksums))
+            public = signing._gpg(home, '--armor', '--export', primary)
+            status = signing._gpg(home, '--status-fd', '1', '--verify',
+                                  str(self.signature), str(self.checksums)).decode()
+            self.assertIn('[GNUPG:] KEYEXPIRED ', status)
+            self.assertIn('[GNUPG:] GOODSIG ', status)
+            self.assertNotIn('[GNUPG:] EXPKEYSIG ', status)
+        signing._verify_signature(self.checksums, self.signature, public, primary)
+        signing._verify_signature(self.checksums, old_signature, public, primary)
+
     def test_revoked_subkey_is_refused_even_with_validsig(self):
         with signing._home() as home:
             primary = self.historical_fixture(home, '0')

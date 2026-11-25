@@ -80,7 +80,8 @@ def _verify_signature(checksums: Path, signature: Path, public_key: bytes,
         # VALIDSIG names the signing subkey first, and the primary key last.
         if len(good) != 1 or len(valid) != 1 or len(valid[0]) != 11 or valid[0][-1] != expected_primary:
             raise ValueError('Expected exactly one good signature by the pinned primary')
-        if any(record[0] in ('EXPKEYSIG', 'KEYEXPIRED') for record in records):
+        # KEYEXPIRED can describe an unrelated sibling subkey.
+        if any(record[0] == 'EXPKEYSIG' for record in records):
             signing_key, signed_at = valid[0][1], valid[0][3]
             listing = _gpg(home, '--with-colons', '--fingerprint', '--list-keys').decode()
             expiry, signing_expiry = '', None
